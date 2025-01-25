@@ -1,6 +1,6 @@
 from http.client import HTTPException
 from fastapi import FastAPI, Request
-from hackathon.server.schemas import CardsRequest, CardsResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
+from hackathon.server.schemas import CardsRequest, CardsResponse, CardsVoiceRequest, CardsVoiceResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
 from hackathon.speech.speech import text_to_speech_file,read_audio_config, read_audio_file
 from mistralai import Mistral
 from pathlib import Path
@@ -113,24 +113,52 @@ async def engagement():
     return {'engagement': value}
 
 
-@app.post("/card-voice", response_model=CardsResponse)   
-async def cards(request: CardsRequest):
+@app.post("/card-voice", response_model=CardsVoiceResponse)   
+async def cards(request: CardsVoiceRequest):
+    """
+    WARNING CARDS HAVE AN IMPACT HERE
 
+    """
     if not hasattr(app.state, "game_engine"):
         raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")
      
     game_engine = app.state.game_engine
     game_engine.timestamp += 1
-    presenter=game_engine.presenter
+    presenter = game_engine.presenter
 
-    last_text=request.previous_character_text
-    previous_speaker=request.previous_speaker
-    card=request.chosen_card
+    last_text = request.previous_character_text
+    previous_speaker_name = request.previous_speaker
 
 
-    prompt=presenter.play_card(card, last_text, previous_speaker)
+    if previous_speaker_name == game_engine.candidate_1.name:
+        next_speaker = game_engine.candidate_2
+        last_speaker = game_engine.candidate_1
 
-    return {'presenter_question' : prompt}
+    elif previous_speaker_name == game_engine.candidate_2.name:
+        next_speaker = game_engine.candidate_2
+        last_speaker = game_engine.candidate_1
+    
+    card = request.chosen_card #WARNING!!!! CHECK THE FORMAT
+
+    current_audio_config = game_engine.audio_config['chairman']
+
+    msg = presenter.play_card(card, last_text, last_speaker, next_speaker)
+    
+    data_folder = game_engine.data_folder
+    
+    audio_file_path = text_to_speech_file(text=msg,
+                                          voice_id=current_audio_config['voice_id'], 
+                                          stability=current_audio_config['stability'],
+                                          similarity=current_audio_config['similarity'], 
+                                          style=current_audio_config['style'],
+                                          base_path=str(data_folder)
+                                          )
+    
+    audio_signal = read_audio_file(audio_file_path) # base64 
+    
+    os.remove(audio_file_path)
+
+    return {'presenter_question' : msg, "audio": audio_signal}
 
 
 @app.post("/cards-request", response_model=CardsResponse)   

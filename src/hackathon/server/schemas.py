@@ -28,9 +28,9 @@ class CardsVoiceResponse(BaseModel):
     presenter_question:str
 
 class CardsVoiceRequest(BaseModel):
-    previous_character_text:str
-    previous_speaker:str
-    chosen_card:dict
+    previous_character_text: str
+    previous_speaker: str
+    chosen_card: dict
 
 class CardsResponse(BaseModel):
     cards: List[Dict]

@@ -14,13 +14,12 @@ class Presenter():
         tout le public est parti
         """
 
-        self.client=client
-        self.model=model
-        self.general_context=general_context
-        self.own_history=[]
+        self.client = client
+        self.model = model
+        self.general_context = general_context
+        self.own_history = []
 
-    def play_card(self, card, last_sentence_said, 
-                  previous_speaker, max_tokens=500):
+    def play_card(self, card, last_sentence_said, previous_speaker, next_speaker, max_tokens=500):
         """
         card is a dictionnary
         candidates input: contains the last sentences said by
@@ -30,15 +29,13 @@ class Presenter():
         the player if the latter decided to play a card. 
         """
 
-        topic, mood = next(iter(card.items()))
-
-        input_instruction = """You are the moderator
-        of the TV debate. You ask a question to the candidates
-        about {} with the following attitude {}. You have the last answer from {} 
-        to smooth the question and the transition. Keep
-        it brief, and fun, it is for a video game. .      
-        """.format(topic, mood, previous_speaker)
-
+        input_instruction = f"""You are the moderator
+        of the TV debate. You have to ask a question to the candidates
+        {next_speaker.name}. Note that the candidate is in the following attitude : {next_speaker.attitude}.
+        Here is thesubject of the question you have to ask: {card.title}.
+        To give a bit of context, here is the last answer of the candidate {previous_speaker.name}: {last_sentence_said}.
+        Keep it brief.
+        """
 
         messages = [
             {
@@ -51,11 +48,10 @@ class Presenter():
                 "role": "user",
                 "content": (
                     f"Instructions: {input_instruction}\n"
-                    f"Opponent's last sentences: {last_sentence_said}\n"
-                    f"Conversation history: {self.own_history}"
                 ),
             },
         ]
+
         # Call the chat completion API
         time.sleep(1)
         chat_response = self.client.chat.complete(

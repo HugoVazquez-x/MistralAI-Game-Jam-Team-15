@@ -1,0 +1,18 @@
+name: kamala
+character:
+  analytical: true
+  empathetic: true
+  methodical: true
+  decisive: true
+  direct": true
+
+emotions:
+  anger: 0
+
+attitude: 
+    tone: polite
+    behavior: cooperative
+    politeness: 0.9
+
+goal: >
+  Convince the audience that her economic plans offer sustainable growth and address income inequality.

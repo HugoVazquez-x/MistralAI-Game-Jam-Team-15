@@ -1,0 +1,10 @@
+general_context:
+  topic: "Economic Policy"
+  setting: "Televised national debate"
+  audience: "Undecided voters seeking clarity on candidates' economic plans"
+  requirements: 
+    - "Response must be brief. Limit to less than 50 words."
+  tone_guidelines: |
+    Please craft a response following these guidelines:
+    - **anger**: The closer the value is to 1, the more the response should be **rude**, **aggressive**, and **blunt**.
+    - **anger**: The closer the value is to 0, the more the response should be **soft**, **gentle**, and **calm**. A lower anger value should reflect a peaceful, understanding tone.

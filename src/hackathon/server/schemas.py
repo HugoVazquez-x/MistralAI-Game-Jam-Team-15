@@ -23,4 +23,14 @@ class CardsRequest(BaseModel):
 
 
 class CardsResponse(BaseModel):
-    presenter_question:str
+    pass
+
+class StartRequest(BaseModel):
+    """
+    Available name for now: ['trump', 'kamala']
+    """
+    candidate_1_name: str 
+    candidate_2_name: str   
+
+class StartResponse(BaseModel):
+    status: str

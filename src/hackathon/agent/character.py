@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 import json
 import time
-from hackathon.server.agent.arbitrary import EmotionAgent
+from hackathon.agent.arbitrary import EmotionAgent
 
 
 class AIAgent:
@@ -61,7 +61,6 @@ class AIAgent:
                 goal=character_data.get("goal"),
                 general_context = context_data.get("general_context"),
                 arbitrary_agent = arbitrary_agent
-
             )
         else:
             raise ValueError("Failed to parse YAML content.")

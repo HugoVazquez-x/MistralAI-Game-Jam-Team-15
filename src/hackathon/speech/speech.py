@@ -37,11 +37,11 @@ def read_audio_file(audio_path: str):
             return audio_base64
 
 
-def text_to_speech_file(text: str, voice: str, stability=0.5, similarity=1.0, style=0.3, base_path='audio_store') -> str:
+def text_to_speech_file(text: str, voice_id: str, stability=0.5, similarity=1.0, style=0.3, base_path='audio_store') -> str:
     """voice: politician1 or politician2"""
     # Calling the text_to_speech conversion API with detailed parameters
     response = client.text_to_speech.convert(
-        voice_id=voices[voice], # Adam pre-made voice
+        voice_id=voice_id, # Adam pre-made voice
         output_format="mp3_22050_32",
         text=text,
         model_id="eleven_turbo_v2_5", # use the turbo model for low latency
@@ -53,8 +53,7 @@ def text_to_speech_file(text: str, voice: str, stability=0.5, similarity=1.0, st
         ),
     )
 
-    # play(response)
-
+    
     save_file_path = os.path.join(base_path, f"{uuid.uuid4()}.mp3")
 
     with open(save_file_path, "wb") as f:

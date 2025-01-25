@@ -5396,7 +5396,7 @@ PrefabInstance:
       objectReference: {fileID: 1843183008}
     - target: {fileID: 3489173090616759414, guid: d64e385abdc9141089afbcb0b42ef5de, type: 3}
       propertyPath: customApiUrl
-      value: http://192.168.80.201:8000
+      value: http://51.15.242.211:8000
       objectReference: {fileID: 0}
     - target: {fileID: 3489173090616759414, guid: d64e385abdc9141089afbcb0b42ef5de, type: 3}
       propertyPath: leftCharacter

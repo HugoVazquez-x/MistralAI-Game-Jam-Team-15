@@ -5,6 +5,8 @@ import hackathon.game_mechanics.pre_game_mechanics as pre
 from pathlib import Path
 from mistralai import Mistral
 import yaml
+from hackathon.game_mechanics.pre_game_mechanics import generate_background_personality 
+
 
 def read_yaml(file_path):
     """
@@ -49,11 +51,13 @@ def card_enrichment():
     
 
     trump =  ch.AIAgent.from_yaml(trump_yaml, context_yaml, client, emotional_agent)
+    generate_background_personality(trump, client)
     kamala =  ch.AIAgent.from_yaml(kamala_yaml, context_yaml, client, emotional_agent)
-
+    generate_background_personality(kamala, client)
+    
     print(trump.personal_context)
     pre.add_cards_to_personal_context_full_prompt(card_agent, [trump, kamala], deck)
-
+    print("-------------")
     print(trump.personal_context)
 
 

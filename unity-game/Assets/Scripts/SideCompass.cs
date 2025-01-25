@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SideCompass : MonoBehaviour
@@ -13,7 +14,7 @@ public class SideCompass : MonoBehaviour
     [SerializeField]
     private SpriteRenderer bgSprite;
 
-    public float Value
+    public float Value // from -1 to 1
     {
         get => value;
         set
@@ -32,6 +33,7 @@ public class SideCompass : MonoBehaviour
     {
         float t = (value + 1) / 2;
         bgSprite.color = gradient.Evaluate(t);
-        arrow.localEulerAngles = new Vector3(0, 0, value * 88);
+
+        arrow.localEulerAngles = new Vector3(0, 0, Math.Clamp(Value, -1, 1) * 88);
     }
 }

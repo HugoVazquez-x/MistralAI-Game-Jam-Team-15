@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -20,15 +21,13 @@ public class DebateCardData
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private DebateCardData[] cards;
-
-    private DebateCardData currentCardData;
+    public List<DebateCardData> cards;
 
     [SerializeField]
-    private DebateCard currentCard;
+    public DebateCard currentCard;
 
     [SerializeField]
-    private DebateCard nextCard;
+    private DebateCard nextDebateCard;
 
     private Animator animator;
 
@@ -39,43 +38,57 @@ public class Player : MonoBehaviour
 
     private bool isDrawingCard = false;
 
+    private bool hasPlayerCard = false;
+
     public void DrawCard()
     {
         if (isDrawingCard)
             return;
         isDrawingCard = true;
-        if (cards.Length == 0)
-        {
-            cards = GameManager.singleton.cards.ToArray();
-            return;
-        }
+
+        if (cards.Count == 0)
+            cards = new List<DebateCardData>(GameManager.singleton.cards);
 
         animator.SetTrigger("DrawCard");
-
-        nextCard.SetCard(cards[UnityEngine.Random.Range(0, cards.Length)]);
+        GameManager.singleton.soundManager.PlayPageFlip();
+        DebateCardData randomCard = cards[UnityEngine.Random.Range(0, cards.Count)];
+        nextDebateCard.SetCard(randomCard);
     }
 
     public void OnDrawCardEnd()
     {
-        currentCard.SetCard(nextCard.cardData);
-        currentCardData = nextCard.cardData;
+        currentCard.SetCard(nextDebateCard.cardData);
         isDrawingCard = false;
     }
 
     public void OnPlayCard()
     {
-        if (GameManager.singleton.nextCard == null)
+        if (!hasPlayerCard)
         {
             GameManager.singleton.OnPlayerSendQuestion(currentCard.cardData);
+            currentCard.OnPlayCard();
+            hasPlayerCard = true;
         }
+        else
+        {
+            MainCanvas.singleton.ShowBossCallUI(
+                "Bolloré",
+                "Wait for the people to stop talking before playing your card",
+                2f
+            );
+        }
+    }
+
+    public void OnPlayedCard(DebateCardData debateCardData)
+    {
+        cards.Remove(debateCardData);
+        DrawCard();
+        hasPlayerCard = false;
     }
 
     void Update()
     {
-        if (GameManager.singleton.isGameOver)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow) && !GameManager.singleton.IsPlayerTurn)
         {
             DrawCard();
         }

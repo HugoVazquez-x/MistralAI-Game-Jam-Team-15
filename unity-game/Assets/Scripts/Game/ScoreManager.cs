@@ -41,6 +41,14 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    public void FirstCall()
+    {
+        MainCanvas.singleton.ShowBossCallUI(
+            "Bolloré",
+            "You have to make sure TRUMP wins the debate! Otherwise, you're fired!"
+        );
+    }
+
     IEnumerator SwitchAfterDelay(float waitDuration)
     {
         yield return new WaitForSeconds(waitDuration);
@@ -49,13 +57,11 @@ public class ScoreManager : MonoBehaviour
 
     public void UpdateEngagement()
     {
-        engagement =
-            (int)(
-                GameManager.singleton.leftCharacter.Anger
-                - GameManager.singleton.rightCharacter.Anger
-            )
-            * 100
-            / 200;
+        float angerDiff =
+            GameManager.singleton.rightCharacter.Anger - GameManager.singleton.leftCharacter.Anger;
+
+        engagement = (int)(angerDiff * 100);
+        publicCompass.Value = angerDiff / 15f;
     }
 
     public void UpdateScore()
@@ -75,15 +81,13 @@ public class ScoreManager : MonoBehaviour
         MainCanvas.singleton.ShowBossCallUI(
             bigBossNames[UnityEngine.Random.Range(0, bigBossNames.Length)],
             bigBossCalls[UnityEngine.Random.Range(0, bigBossCalls.Length)]
-                .Replace("{TARGET}", CharThatShouldWin.name)
+                .Replace("{TARGET}", CharThatShouldWin.characterName.ToUpper())
         );
     }
 
     public void TriggerEverySecond()
     {
         UpdateScore();
-        if (publicCompass != null)
-            publicCompass.Value = engagement / 100;
     }
 
     void Update()

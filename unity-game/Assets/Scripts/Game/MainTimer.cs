@@ -16,6 +16,9 @@ public class MainTimer : MonoBehaviour
 
     private bool timerRunning = false;
 
+    [SerializeField]
+    private AnimationCurve speedMultiplierByGameProgress;
+
     void Start()
     {
         timeRemaining = totalTime;
@@ -40,9 +43,9 @@ public class MainTimer : MonoBehaviour
 
         if (Mathf.FloorToInt(timeRemaining) != Mathf.FloorToInt(timeRemaining + Time.deltaTime))
         {
-            OnSecondPassed?.Invoke();
+            GameManager.singleton.globalSpeedMultiplier = speedMultiplierByGameProgress.Evaluate(
+                1 - timeRemaining / totalTime
+            );
         }
     }
-
-    public UnityAction OnSecondPassed;
 }

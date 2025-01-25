@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public static class Helpers
 {
@@ -31,5 +33,35 @@ public static class Helpers
         }
 
         textComponent.text = text;
+    }
+
+    public static IEnumerator PostProcessAudio(
+        string audioString,
+        Action<AudioClip> successCallback
+    )
+    {
+        var audioBytes = Convert.FromBase64String(audioString);
+
+        string fileName = Guid.NewGuid().ToString() + ".mp3";
+
+        string filePath = Path.Join(Application.persistentDataPath, fileName);
+
+        File.WriteAllBytes(filePath, audioBytes);
+
+        var uri = new Uri(filePath);
+
+        UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(
+            uri.AbsoluteUri,
+            AudioType.MPEG
+        );
+
+        yield return request.SendWebRequest();
+        if (request.result.Equals(UnityWebRequest.Result.ConnectionError))
+            GameManager.singleton.HandleError(request.error + "\n(getting the file " + uri + ")");
+        else
+        {
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(request);
+            successCallback(clip);
+        }
     }
 }

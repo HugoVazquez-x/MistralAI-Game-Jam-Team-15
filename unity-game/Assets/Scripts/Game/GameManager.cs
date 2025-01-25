@@ -32,13 +32,7 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
-    void InitGameId()
-    {
-        Guid myuuid = Guid.NewGuid();
-        string myuuidAsString = myuuid.ToString();
-        gameId = myuuidAsString;
-    }
+    public SoundManager soundManager;
 
     public string gameId;
 
@@ -77,17 +71,12 @@ public class GameManager : MonoBehaviour
 
     public float globalSpeedMultiplier = 1;
 
-    public void HandleError(string error)
-    {
-        Debug.LogError(error);
-        MainCanvas.singleton.errorText.text = error;
-        MainCanvas.singleton.errorPanel.SetActive(true);
-        isGameOver = true;
-        Cursor.lockState = CursorLockMode.None;
-    }
+    public Player player;
 
     void Start()
     {
+        player = FindObjectOfType<Player>();
+
         InitGameId();
         currentCharacter = leftCharacter; // start with trump speaking
 
@@ -95,6 +84,7 @@ public class GameManager : MonoBehaviour
 
         timer = GetComponent<MainTimer>();
         scoreManager = GetComponent<ScoreManager>();
+        soundManager = GetComponent<SoundManager>();
     }
 
     IEnumerator StartGame()
@@ -106,50 +96,50 @@ public class GameManager : MonoBehaviour
         if (isGameOver)
             yield break;
 
-        FetchCards();
+        yield return customClient.GetDebateCards(
+            (cards) => this.cards = new List<DebateCardData>(cards)
+        );
+
+        if (cards.Count == 0)
+        {
+            HandleError("No cards returned by the API");
+            yield break;
+        }
+
+        for (int i = 0; i < cards.Count; i++)
+            cards[i].id = i;
 
         if (isGameOver)
             yield break;
 
         yield return Fader.FadeIn();
+        Debug.Log("Game started ! " + nextCard == null);
+
         timer.StartTimer();
+        scoreManager.FirstCall();
 
-        MainCanvas.singleton.ShowBossCallUI(
-            "Bolloré",
-            "You have to make sure TRUMP wins the debate! Otherwise, you're fired!"
-        );
+        nextCard = null;
 
-        for (int i = 0; i < 10; i++)
+        // Add a first message, otherwise the AI will not start
+        messages.Add(new MSG { role = "system", content = "You are at a debate" });
+
+        while (true)
         {
-            if (nextCard != null)
+            // Only blocking is API calls, the rest (talking) is async
+            if (nextCard?.id != null) // needing the ?.id because of phantom undefined nextCard :shrug:
                 yield return PlayerPlay(nextCard);
             else
-                yield return PlayTurnCustomApi();
-            yield return new WaitForSeconds(0.5f);
+                yield return PlayAITurn();
 
             NextTurn();
         }
     }
 
-    private void FetchCards()
-    {
-        StartCoroutine(
-            customClient.GetDebateCards(
-                (cards) =>
-                {
-                    this.cards = new List<DebateCardData>(cards);
-                    for (int i = 0; i < this.cards.Count; i++)
-                    {
-                        this.cards[i].id = i;
-                    }
-                }
-            )
-        );
-    }
-
-    public IEnumerator PlayTurnCustomApi()
+    public IEnumerator PlayAITurn()
     {
         CustomClientChatResponse? response = null;
+
+        Debug.Log("Playing AI turn");
 
         yield return customClient.Chat(
             messages.Last().content,
@@ -158,15 +148,21 @@ public class GameManager : MonoBehaviour
             (r) => response = r
         );
 
+        // Wait for the character to finish talking
+        while (MainCanvas.singleton.dialogManager.IsTalking)
+            yield return null;
+
         messages.Add(new MSG { role = "assistant", content = response.generated_text });
 
         if (currentCharacter != null)
             currentCharacter.Anger = response.anger * 10;
 
-        yield return MainCanvas.singleton.dialogManager.CharacterSay(
-            currentCharacter,
-            response.generated_text,
-            response.audioClip
+        StartCoroutine(
+            MainCanvas.singleton.dialogManager.CharacterSay(
+                currentCharacter,
+                response.generated_text,
+                response.audioClip
+            )
         );
     }
 
@@ -176,14 +172,28 @@ public class GameManager : MonoBehaviour
         currentCharacter = currentCharacter == leftCharacter ? rightCharacter : leftCharacter;
     }
 
+    #region  Player
+
+
+    private bool playerTurn = false;
+
+    public bool IsPlayerTurn => playerTurn;
+
     public void OnPlayerSendQuestion(DebateCardData debateCardData)
     {
+        Debug.Log("Player send question " + debateCardData.title);
         nextCard = debateCardData;
     }
 
     IEnumerator PlayerPlay(DebateCardData debateCardData)
     {
-        nextCard = null;
+        if (nextCard == null || playerTurn)
+            yield break;
+
+        nextCard = null; // Set here to allow AI to respond in main loop
+        playerTurn = true;
+
+        Debug.Log("Playing Player with card " + debateCardData.title);
 
         CustomClientPlayerCardResponse? response = null;
         yield return customClient.PlayerPlayCard(
@@ -200,12 +210,25 @@ public class GameManager : MonoBehaviour
 
         previousCharacter = null;
 
-        yield return MainCanvas.singleton.dialogManager.CharacterSay(
-            null,
-            response.presenter_question,
-            response.audioClip
+        // Wait for the character to finish talking
+        while (MainCanvas.singleton.dialogManager.IsTalking)
+            yield return null;
+
+        // Async play the player talking not to block the main loop
+        StartCoroutine(
+            PlayerTalking(response.presenter_question, response.audioClip, debateCardData)
         );
     }
+
+    IEnumerator PlayerTalking(string text, AudioClip audioClip, DebateCardData debateCardData)
+    {
+        yield return MainCanvas.singleton.dialogManager.CharacterSay(null, text, audioClip);
+
+        player.OnPlayedCard(debateCardData);
+        playerTurn = false;
+    }
+
+    #endregion
 
     public void OnTimerEnd()
     {
@@ -258,4 +281,28 @@ public class GameManager : MonoBehaviour
             );
         });
     }
+
+    #region Error Handling
+
+    public void HandleError(string error)
+    {
+        Debug.LogError(error);
+        MainCanvas.singleton.errorText.text = error;
+        MainCanvas.singleton.errorPanel.SetActive(true);
+        isGameOver = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    #endregion
+
+    #region Misc
+
+    void InitGameId()
+    {
+        Guid myuuid = Guid.NewGuid();
+        string myuuidAsString = myuuid.ToString();
+        gameId = myuuidAsString;
+    }
+
+    #endregion
 }

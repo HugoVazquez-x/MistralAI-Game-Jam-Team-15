@@ -27,8 +27,13 @@ public class DialogManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    private bool isTalking = false;
+    public bool IsTalking => isTalking;
+
     public IEnumerator CharacterSay(AICharacter? c, string dialog, AudioClip audioClip)
     {
+        isTalking = true;
+
         currentTalkingCharacter?.StopTalking();
         if (c != null)
         {
@@ -43,6 +48,13 @@ public class DialogManager : MonoBehaviour
         dialogPanel.SetActive(true);
         yield return AnimateText(dialog, audioClip);
         currentTalkingCharacter?.StopTalking();
+
+        while (audioSource.isPlaying)
+            yield return null;
+
+        GameManager.singleton.soundManager.PlayCheer();
+
+        isTalking = false;
     }
 
     IEnumerator AnimateText(string text, AudioClip audioClip)

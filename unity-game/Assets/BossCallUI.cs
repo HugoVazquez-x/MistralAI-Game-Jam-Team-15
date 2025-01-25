@@ -29,18 +29,29 @@ public class BossCallUI : MonoBehaviour
 
     public static BossCallUI currentBossCallUI = null;
 
-    public void TriggerPhoneCall(string bossName, string content, Action onBossCallEnd)
+    private float speed = 1f;
+
+    public void TriggerPhoneCall(
+        string bossName,
+        string content,
+        Action onBossCallEnd,
+        float speed = 1f
+    )
     {
         if (currentBossCallUI != null)
         {
             Destroy(currentBossCallUI.gameObject);
         }
-        currentBossCallUI = this;
-
-        this.onBossCallEnd = onBossCallEnd;
-        Debug.Log("TriggerPhoneCall : " + bossName + " : " + content);
         animator = GetComponent<Animator>();
+        Debug.Log("TriggerPhoneCall : " + bossName + " : " + content);
         canvasGroup = GetComponent<CanvasGroup>();
+
+        this.speed = speed;
+        this.onBossCallEnd = onBossCallEnd;
+
+        animator.speed = speed;
+
+        currentBossCallUI = this;
 
         canvasGroup.alpha = 1;
         animator.SetTrigger("BossCall");
@@ -54,13 +65,17 @@ public class BossCallUI : MonoBehaviour
 
     public void TriggerShowBossText()
     {
+        GameManager.singleton.soundManager.PlayDing();
         StartCoroutine(ShowBossText());
     }
 
     private IEnumerator ShowBossText()
     {
-        yield return Helpers.AnimateText(bossName, bossNameText, textSpeed);
-        yield return Helpers.AnimateText(bossCallText, bossCallTextText, textSpeed);
+        // yield return Helpers.AnimateText(bossName, bossNameText, textSpeed);
+        bossName.text = bossNameText;
+        yield return Helpers.AnimateText(bossCallText, bossCallTextText, textSpeed / speed);
+
+        speed = 1f; // reset speed
 
         yield return new WaitForSeconds(showForSeconds);
 

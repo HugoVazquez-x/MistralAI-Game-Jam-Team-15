@@ -1,61 +1,9 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Text;
 using System.Text.Json;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
-
-public class CustomClientStartRequest
-{
-    public string candidate_1_name { get; set; }
-    public string candidate_2_name { get; set; }
-}
-
-public class CustomClientChatRequest
-{
-    public string previous_character_text { get; set; }
-
-    public string previous_speaker { get; set; } // "trump" | "kamala" | "player"
-    public string current_speaker { get; set; } // "trump" | "kamala"
-}
-
-public class CustomClientChatRawResponse
-{
-    public string generated_text { get; set; }
-    public string audio { get; set; }
-
-    public float anger { get; set; } // 0 - 1
-}
-
-public class CustomClientChatResponse : CustomClientChatRawResponse
-{
-    public AudioClip audioClip { get; set; }
-}
-
-public class CustomClientPlayerCardRequest
-{
-    public string previous_character_text { get; set; }
-    public string previous_speaker { get; set; } // "trump" | "kamala" | "player"
-    public int card_id { get; set; }
-}
-
-public class CustomClientPlayerCardResponseRaw
-{
-    public string presenter_question { get; set; }
-    public string audio { get; set; } // "trump" | "kamala" | "player"
-}
-
-public class CustomClientPlayerCardResponse : CustomClientPlayerCardResponseRaw
-{
-    public AudioClip audioClip { get; set; }
-}
-
-public class CustomClientCardsResponse
-{
-    public DebateCardData[] cards { get; set; }
-}
 
 public class CustomClient
 {
@@ -67,7 +15,7 @@ public class CustomClient
             UnityWebRequest www = UnityWebRequest.Get(GameManager.singleton.customApiUrl + endpoint)
         )
         {
-            www.SetRequestHeader("game-id", GameManager.singleton.gameId);
+            // www.SetRequestHeader("game-id", GameManager.singleton.gameId);
             yield return www.SendWebRequest();
             if (www.result != UnityWebRequest.Result.Success)
             {
@@ -91,8 +39,8 @@ public class CustomClient
             )
         )
         {
+            // www.SetRequestHeader("game-id", GameManager.singleton.gameId);
             yield return www.SendWebRequest();
-            www.SetRequestHeader("game-id", GameManager.singleton.gameId);
 
             requestCount++;
 
@@ -155,9 +103,8 @@ public class CustomClient
             }
         );
 
-        yield return PostProcessAudio(
+        yield return Helpers.PostProcessAudio(
             response.audio,
-            character,
             (AudioClip clip) =>
             {
                 successCallback(
@@ -201,9 +148,8 @@ public class CustomClient
             }
         );
 
-        yield return PostProcessAudio(
+        yield return Helpers.PostProcessAudio(
             res.audio,
-            res.presenter_question,
             (AudioClip clip) =>
             {
                 successCallback(
@@ -216,37 +162,5 @@ public class CustomClient
                 );
             }
         );
-    }
-
-    IEnumerator PostProcessAudio(
-        string audioString,
-        string character,
-        Action<AudioClip> successCallback
-    )
-    {
-        var audioBytes = Convert.FromBase64String(audioString);
-
-        string fileName = character + "_" + requestCount + ".mp3";
-
-        string filePath = Path.Join(Application.persistentDataPath, fileName);
-        Debug.Log("CustomClient audioBytes: " + audioBytes.Length + " path " + filePath);
-
-        File.WriteAllBytes(filePath, audioBytes);
-
-        var uri = new Uri(filePath);
-
-        UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(
-            uri.AbsoluteUri,
-            AudioType.MPEG
-        );
-
-        yield return request.SendWebRequest();
-        if (request.result.Equals(UnityWebRequest.Result.ConnectionError))
-            GameManager.singleton.HandleError(request.error + "\n(getting the file " + uri + ")");
-        else
-        {
-            AudioClip clip = DownloadHandlerAudioClip.GetContent(request);
-            successCallback(clip);
-        }
     }
 }

@@ -1,11 +1,35 @@
 import hackathon.agent.arbitrary as ar
 import hackathon.agent.character as ch
+import hackathon.game_mechanics.entities as ent
+import hackathon.game_mechanics.pre_game_mechanics as pre
 from pathlib import Path
 from mistralai import Mistral
+import yaml
+
+def read_yaml(file_path):
+    """
+    Reads a YAML file and returns its contents as a Python object.
+
+    Args:
+        file_path (str): The path to the YAML file.
+
+    Returns:
+        dict or list: The parsed YAML structure (dictionary or list).
+    """
+    try:
+        with open(file_path, 'r') as file:
+            data = yaml.safe_load(file)
+        return data
+    except FileNotFoundError:
+        print(f"Error: File not found at {file_path}")
+    except yaml.YAMLError as e:
+        print(f"Error parsing YAML file: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 
 
-def anger_evolution():
+def card_enrichment():
     api_key = ""
     client = Mistral(api_key=api_key)
     print(Path(__file__))
@@ -13,39 +37,24 @@ def anger_evolution():
     trump_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
     kamala_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
     context_yaml = Path(__file__).parents[2] / 'config' / 'context.yaml'
+    cards_yaml = Path(__file__).parents[2] / 'config' / 'cards_trump_english.yaml'
 
-    arbitrary_agent = ar.EmotionAgent(client, model="mistral-large-latest")
+    cards = read_yaml(cards_yaml)
+
+    cards = [ent.Card.from_dict(card) for card in cards]
+
+    emotional_agent = ar.EmotionAgent(client, model="mistral-large-latest")
+    card_agent = ar.CardAgent(client, model="mistral-large-latest")
     
-    trump =  ch.AIAgent.from_yaml(trump_yaml, context_yaml, client, arbitrary_agent)
-    kamala =  ch.AIAgent.from_yaml(kamala_yaml, context_yaml, client, arbitrary_agent)
 
-    # print(f'{trump.emotions=}')
-    # print(f'{trump.attitudes=}')
-    import time
+    trump =  ch.AIAgent.from_yaml(trump_yaml, context_yaml, client, emotional_agent)
+    kamala =  ch.AIAgent.from_yaml(kamala_yaml, context_yaml, client, emotional_agent)
 
-    txt_list = ["trump is an asshole", "Sorry mr trump, youre very strong, powerful and intelligent", "Trump, you know I like your wife. Even if you could be a little bit rude, I know you have a great heart.", "Actualy youre politic is not so bad", "in fact the economical situation of the country improve during your presidence"]
-    for inpt in txt_list:
-        previous_speaker = 'kamala'
-        #previous_character_text = "trump is an asshole"
-        previous_character_text = inpt
-        opponent = kamala
+    print(trump.personal_context)
+    pre.add_cards_to_personal_context(card_agent, [trump, kamala], cards)
 
-        print()
-        print("__________BEFORE UPDATE__________")
-
-        input = f"{previous_speaker} said to you:{previous_character_text}. It's your turn to respond to {previous_speaker}"
-        
-        print(f'{input=}')
-        trump.update_emotions(input)
-        print()
-        print("__________AFTER UPDATE__________")
-        print(f"{trump.emotions['anger']=}")
-        print(f'{trump.context_memory=}')
-        print(f"{trump.attitudes=}")
-        print()
-        time.sleep(1)
-
+    print(trump.personal_context)
 
 
 if __name__ == "__main__":
-    anger_evolution()
+    card_enrichment()

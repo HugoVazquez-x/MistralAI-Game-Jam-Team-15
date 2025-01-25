@@ -1,0 +1,15 @@
+- title: "Stormy Daniels Case"
+  year: 2016
+  description: "Michael Cohen, Donald Trump's lawyer, paid $130,000 to pornographic actress Stormy Daniels to buy her silence about an alleged affair in 2006. Trump denied the affair, but Cohen admitted that the payment was made to influence the 2016 presidential election."
+  source: "https://en.wikipedia.org/wiki/Stormy_Daniels–Donald_Trump_scandal"
+  change_personal_context: False
+  game_context: "Political scandal involving hush money during a presidential election."
+  information_intensity: 5
+
+- title: "Access Hollywood Recording"
+  year: 2005
+  description: "A 2005 video resurfaced in 2016, in which Donald Trump boasted about inappropriate sexual behavior toward women, stating: 'When you're a star, they let you do it. You can do anything.' These comments were widely condemned."
+  source: "https://en.wikipedia.org/wiki/Donald_Trump_Access_Hollywood_tape"
+  change_personal_context: True
+  game_context: "Controversial comments resurfacing, impacting public opinion."
+  information_intensity: 5

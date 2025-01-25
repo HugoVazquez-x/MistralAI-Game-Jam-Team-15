@@ -1,4 +1,5 @@
 from http.client import HTTPException
+from typing import Dict, List
 from fastapi import FastAPI, Request
 from hackathon.game_mechanics.pre_game_mechanics import generate_background_personality
 from hackathon.server.schemas import CardsRequest, CardsResponse, CardsVoiceRequest, CardsVoiceResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
@@ -177,7 +178,7 @@ async def cards(request: CardsVoiceRequest):
     return {'presenter_question': msg, "audio": audio_signal}
 
 
-@app.get("/cards_request", response_model=str)   
+@app.get("/cards_request", response_model=List[Dict])   
 async def cards():
 
     if not hasattr(app.state, "game_engine"):
@@ -185,6 +186,5 @@ async def cards():
      
     game_engine = app.state.game_engine
 
-    cards = game_engine.deck.to_json_all()
-
-    return cards
+    cards_list = game_engine.deck.to_list()
+    return cards_list

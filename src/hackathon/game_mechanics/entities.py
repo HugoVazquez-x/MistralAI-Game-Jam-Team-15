@@ -40,9 +40,8 @@ class Deck:
         self.all_cards = self.cards_1 + self.cards_2 + self.cards_neutral
         self.shuffle_all()
 
-    def to_json_all(self): 
-        all_cards = self.cards_1 + self.cards_2 + self.cards_neutral
-        return json.dumps([asdict(card) for card in all_cards])
+    def to_list(self): 
+        return [asdict(card) for card in self.all_cards]
 
 
 @dataclass

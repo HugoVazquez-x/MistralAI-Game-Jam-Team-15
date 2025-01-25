@@ -4,7 +4,7 @@
   source: "https://en.wikipedia.org/wiki/Stormy_Daniels–Donald_Trump_scandal"
   change_personal_context: False
   game_context: "Political scandal involving hush money during a presidential election."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "Access Hollywood Recording"
   year: 2005
@@ -12,4 +12,4 @@
   source: "https://en.wikipedia.org/wiki/Donald_Trump_Access_Hollywood_tape"
   change_personal_context: True
   game_context: "Controversial comments resurfacing, impacting public opinion."
-  information_quality: 5
+  information_intensity: 5

@@ -4,7 +4,7 @@
   source: "https://en.wikipedia.org/wiki/Stormy_Daniels–Donald_Trump_scandal"
   change_personal_context: False
   game_context: "Political scandal involving hush money during a presidential election."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "Access Hollywood Recording"
   year: 2005
@@ -12,21 +12,21 @@
   source: "https://en.wikipedia.org/wiki/Donald_Trump_Access_Hollywood_tape"
   change_personal_context: True
   game_context: "Controversial comments resurfacing, impacting public opinion."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "Sexual Misconduct Allegations"
   description: "Over 25 women have accused Donald Trump of inappropriate sexual behavior, including non-consensual touching and sexual assault, dating back to the 1970s. Trump has denied all these allegations, calling them false and politically motivated."
   source: "https://en.wikipedia.org/wiki/Donald_Trump_sexual_misconduct_allegations"
   change_personal_context: True
   game_context: "Widespread allegations against a high-profile figure."
-  information_quality: 3
+  information_intensity: 3
 
 - title: "Russian Interference in the 2016 Election"
   description: "The investigation led by Special Counsel Robert Mueller examined allegations of collusion between Trump's campaign and the Russian government during the 2016 presidential election. While the Mueller report did not conclude criminal collusion, it did not exonerate Trump from obstruction of justice."
   source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
   change_personal_context: False
   game_context: "Investigation into potential foreign interference and obstruction of justice."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "First Impeachment Proceedings"
   year: 2019
@@ -34,7 +34,7 @@
   source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
   change_personal_context: False
   game_context: "Abuse of power allegations tied to political rivals."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "Second Impeachment Proceedings"
   year: 2021
@@ -42,7 +42,7 @@
   source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
   change_personal_context: True
   game_context: "Historic second impeachment following a major national event."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "E. Jean Carroll Case"
   year: 1996
@@ -50,7 +50,7 @@
   source: "https://en.wikipedia.org/wiki/Donald_Trump_sexual_misconduct_allegations"
   change_personal_context: True
   game_context: "Legal repercussions from decades-old allegations."
-  information_quality: 4
+  information_intensity: 4
 
 - title: "Classified Documents Case"
   year: 2022
@@ -58,7 +58,7 @@
   source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
   change_personal_context: False
   game_context: "Handling of classified information post-presidency."
-  information_quality: 5
+  information_intensity: 5
 
 - title: "Alleged Tax Fraud"
   year: 2023
@@ -66,4 +66,4 @@
   source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
   change_personal_context: True
   game_context: "Financial misconduct investigation affecting a family business."
-  information_quality: 4
+  information_intensity: 4

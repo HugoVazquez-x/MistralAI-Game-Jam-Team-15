@@ -37,11 +37,12 @@ def card_enrichment():
     trump_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
     kamala_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
     context_yaml = Path(__file__).parents[2] / 'config' / 'context.yaml'
-    cards_yaml = Path(__file__).parents[2] / 'config' / 'cards_trump_english.yaml'
+    cards_trump_yaml = Path(__file__).parents[2] / 'config' / 'cards_trump_english.yaml'
+    cards_kamela_yaml = Path(__file__).parents[2] / 'config' / 'cards_kamela.yaml'
+    cards_neutral_yaml = Path(__file__).parents[2] / 'config' / 'cards_neutrals.yaml'
 
-    cards = read_yaml(cards_yaml)
+    deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
 
-    cards = [ent.Card.from_dict(card) for card in cards]
 
     emotional_agent = ar.EmotionAgent(client, model="mistral-large-latest")
     card_agent = ar.CardAgent(client, model="mistral-large-latest")
@@ -51,7 +52,7 @@ def card_enrichment():
     kamala =  ch.AIAgent.from_yaml(kamala_yaml, context_yaml, client, emotional_agent)
 
     print(trump.personal_context)
-    pre.add_cards_to_personal_context(card_agent, [trump, kamala], cards)
+    pre.add_cards_to_personal_context_full_prompt(card_agent, [trump, kamala], deck)
 
     print(trump.personal_context)
 

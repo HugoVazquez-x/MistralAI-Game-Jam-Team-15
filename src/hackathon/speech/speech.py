@@ -6,9 +6,11 @@ from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
 from typing import IO
 from io import BytesIO
+import yaml
+import base64
 
 client = ElevenLabs(
-    api_key='',
+    api_key='', # bad practice but whatever
 )
 
 voices = {
@@ -17,7 +19,25 @@ voices = {
 }
 
 
-def text_to_speech_file(text: str, voice: str, stability=0.5, similarity=1.0, style=0.3) -> str:
+
+def read_audio_config(yaml_path: str) -> dict:
+    try:
+        with open(yaml_path, 'r') as file:
+            config = yaml.safe_load(file)
+            return config
+    except FileNotFoundError:
+        raise FileNotFoundError(f"The file at path '{yaml_path}' does not exist.")
+    except yaml.YAMLError as e:
+        raise ValueError(f"Error parsing YAML file: {e}")
+
+
+def read_audio_file(audio_path: str):
+        with open(audio_path, "rb") as audio_file:
+            audio_base64 = base64.b64encode(audio_file.read()).decode("utf-8")
+            return audio_base64
+
+
+def text_to_speech_file(text: str, voice: str, stability=0.5, similarity=1.0, style=0.3, base_path='audio_store') -> str:
     """voice: politician1 or politician2"""
     # Calling the text_to_speech conversion API with detailed parameters
     response = client.text_to_speech.convert(
@@ -33,22 +53,19 @@ def text_to_speech_file(text: str, voice: str, stability=0.5, similarity=1.0, st
         ),
     )
 
-    # uncomment the line below to play the audio back
     # play(response)
 
-    # Generating a unique file name for the output MP3 file
-    save_file_path = f"{uuid.uuid4()}.mp3"
+    save_file_path = os.path.join(base_path, f"{uuid.uuid4()}.mp3")
 
-    # Writing the audio to a file
     with open(save_file_path, "wb") as f:
         for chunk in response:
             if chunk:
                 f.write(chunk)
 
-    print(f"{save_file_path}: A new audio file was saved successfully!")
+    print(f"{save_file_path}: audio file successfully saved !")
 
-    # Return the path of the saved audio file
     return save_file_path
+
 
 
 

@@ -1,10 +1,12 @@
 from http.client import HTTPException
 from fastapi import FastAPI, Request
 from hackathon.server.schemas import AudienceRequest, CardsRequest, InferenceRequest, InferenceResponse
+from hackathon.speech import text_to_speech_file,read_audio_config, read_audio_file
 from mistralai import Mistral
 from pathlib import Path
 from hackathon.agent.character import AIAgent
 from hackathon.agent.character import EmotionAgent
+
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -33,6 +35,10 @@ class Server:
         self.app.post("/audience", response_model=InferenceResponse)(self.audience)
         self.app.post("/debate-cards", response_model=InferenceResponse)(self.cards)
 
+        # Audio config
+        self.audio_yaml = Path(__file__).parents[1] / 'config' / 'audio.yaml'
+        self.audio_config = read_audio_config(self.audio_yaml)
+
     
     async def infer(self, request: InferenceRequest):
         """Endpoint to handle inference requests."""
@@ -52,8 +58,16 @@ class Server:
 
         current_speaker.update_emotions(input_text)
         msg = current_speaker.respond(input_text)
+        audio_file_path = text_to_speech_file(text=msg, 
+                                              voice=self.audio_config['voice_id'], 
+                                              stability=self.audio_config['stability'], 
+                                              similarity=self.audio_config['similarity'], 
+                                              style=self.audio_config['style'],
+                                              base_path='../../audio_store'
+                                             )
+        audio_signal = read_audio_file(audio_file_path) # base64
 
-        return {"generated_text": msg, "anger": current_speaker.emotions['anger']}
+        return {"generated_text": msg, "anger": current_speaker.emotions['anger'], "audio": audio_signal}
     
     async def audience(self, request: AudienceRequest):
         pass

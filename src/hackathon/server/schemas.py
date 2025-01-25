@@ -9,6 +9,7 @@ class InferenceRequest(BaseModel):
 class InferenceResponse(BaseModel):
     generated_text: str
     anger: float
+    audio: str
 
 class AudienceRequest(BaseModel):
     pass

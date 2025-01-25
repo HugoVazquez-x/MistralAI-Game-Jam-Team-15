@@ -24,7 +24,7 @@ Our theme encouraged us to explore new ways of influencing characters and outcom
 
 ## Instructions
 
-Our game is playable on HuggingFace's [dedicated space]([google.com](https://huggingface.co/spaces/Mistral-AI-Game-Jam/Team15)). 
+Our game is playable on HuggingFace's [dedicated space](https://huggingface.co/spaces/Mistral-AI-Game-Jam/Team15). 
 
 The debate begins, and the candidates start speaking in turn. When it’s the presenter’s turn, the player can choose to play a card from their hand to ask a question or let the debate continue.
 

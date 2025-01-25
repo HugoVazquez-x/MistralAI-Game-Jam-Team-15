@@ -1,0 +1,11 @@
+trump:
+  voice_id: "v7sy7EHXxN3ToffFQfvr"
+  stability: 0.5
+  similarity: 1.0
+  style: 0.3
+
+kamala:
+  voice_id: "ohZqJahxofk8dkPKmd9F"
+  stability: 0.5
+  similarity: 1.0
+  style: 0.3

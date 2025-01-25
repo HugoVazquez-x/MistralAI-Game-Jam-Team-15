@@ -11,15 +11,16 @@ class InferenceResponse(BaseModel):
     anger: float
     audio: str
 
-class AudienceRequest(BaseModel): # ce dont j'ai besoin comme info pour l'audience
+class AudienceRequest(BaseModel): 
     pass
 
-class AudienceResponse(BaseModel): # envoie un float
+class AudienceResponse(BaseModel): 
     current_audience_count: int
-    pass
+    
 
 class CardsRequest(BaseModel):
-    pass
+    chosed_card:dict
+
 
 class CardsResponse(BaseModel):
-    pass
+    presenter_question:str

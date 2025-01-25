@@ -7,6 +7,7 @@ from pathlib import Path
 from hackathon.agent.character import AIAgent
 from hackathon.agent.character import EmotionAgent
 from hackathon.agent.engagement import Engagement
+from hackathon.agent.presenter import Presenter
 
 
 # Initialize FastAPI app
@@ -29,6 +30,11 @@ class Server:
         self.kamala = AIAgent.from_yaml(self.kamala_yaml, self.context_yaml, self.client, self.arbitrary_agent)
 
         self.engagement=Engagement(engagement_0=0)
+        self.presenter=Presenter(
+            general_context=self.context_yaml.general_context,
+            client=Mistral(api_key=api_key),
+            model="mistral-large-latest" # à changer comme structure pour avoir quelque chose de modulable
+        )
 
         # FastAPI application instance
         self.app = FastAPI()
@@ -87,4 +93,22 @@ class Server:
 
 
     async def cards(self, request: CardsRequest):
+
+        trump_last_said=self.trump....
+        trump_last_said=self.trump....
+
+        candidates_input= {
+            'trump':trump_last_said,
+            "kamala":kamala_last_said
+        }
+        prompt=self.presenter.play_card(request,candidates_input)
+
+        return {'presenter_question' : prompt}
+    
+
+    async def start(self,):
         pass
+
+    async def end(self,):
+        pass
+        

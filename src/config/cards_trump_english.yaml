@@ -1,0 +1,69 @@
+- title: "Stormy Daniels Case"
+  year: 2016
+  description: "Michael Cohen, Donald Trump's lawyer, paid $130,000 to pornographic actress Stormy Daniels to buy her silence about an alleged affair in 2006. Trump denied the affair, but Cohen admitted that the payment was made to influence the 2016 presidential election."
+  source: "https://en.wikipedia.org/wiki/Stormy_Daniels–Donald_Trump_scandal"
+  change_personal_context: False
+  game_context: "Political scandal involving hush money during a presidential election."
+  information_quality: 5
+
+- title: "Access Hollywood Recording"
+  year: 2005
+  description: "A 2005 video resurfaced in 2016, in which Donald Trump boasted about inappropriate sexual behavior toward women, stating: 'When you're a star, they let you do it. You can do anything.' These comments were widely condemned."
+  source: "https://en.wikipedia.org/wiki/Donald_Trump_Access_Hollywood_tape"
+  change_personal_context: True
+  game_context: "Controversial comments resurfacing, impacting public opinion."
+  information_quality: 5
+
+- title: "Sexual Misconduct Allegations"
+  description: "Over 25 women have accused Donald Trump of inappropriate sexual behavior, including non-consensual touching and sexual assault, dating back to the 1970s. Trump has denied all these allegations, calling them false and politically motivated."
+  source: "https://en.wikipedia.org/wiki/Donald_Trump_sexual_misconduct_allegations"
+  change_personal_context: True
+  game_context: "Widespread allegations against a high-profile figure."
+  information_quality: 3
+
+- title: "Russian Interference in the 2016 Election"
+  description: "The investigation led by Special Counsel Robert Mueller examined allegations of collusion between Trump's campaign and the Russian government during the 2016 presidential election. While the Mueller report did not conclude criminal collusion, it did not exonerate Trump from obstruction of justice."
+  source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
+  change_personal_context: False
+  game_context: "Investigation into potential foreign interference and obstruction of justice."
+  information_quality: 5
+
+- title: "First Impeachment Proceedings"
+  year: 2019
+  description: "In 2019, Donald Trump was impeached by the House of Representatives for abuse of power and obstruction of Congress, related to his requests to Ukraine to investigate Joe Biden and his son. He was acquitted by the Senate in 2020."
+  source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
+  change_personal_context: False
+  game_context: "Abuse of power allegations tied to political rivals."
+  information_quality: 5
+
+- title: "Second Impeachment Proceedings"
+  year: 2021
+  description: "After the Capitol attack on January 6, 2021, Trump was impeached for 'incitement of insurrection.' He was again acquitted by the Senate, but this marked the first time in U.S. history that a president was impeached twice."
+  source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
+  change_personal_context: True
+  game_context: "Historic second impeachment following a major national event."
+  information_quality: 5
+
+- title: "E. Jean Carroll Case"
+  year: 1996
+  description: "In 2019, writer E. Jean Carroll accused Donald Trump of sexually assaulting her in a New York department store in the 1990s. Trump denied the allegations, and Carroll filed a defamation lawsuit against him. In 2023, a jury found Trump liable for sexual abuse and defamation, ordering him to pay $5 million in damages."
+  source: "https://en.wikipedia.org/wiki/Donald_Trump_sexual_misconduct_allegations"
+  change_personal_context: True
+  game_context: "Legal repercussions from decades-old allegations."
+  information_quality: 4
+
+- title: "Classified Documents Case"
+  year: 2022
+  description: "After leaving office, it was discovered that Donald Trump had retained classified documents at his Mar-a-Lago residence in Florida. A federal investigation was launched to determine if he violated laws governing the handling of government records."
+  source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
+  change_personal_context: False
+  game_context: "Handling of classified information post-presidency."
+  information_quality: 5
+
+- title: "Alleged Tax Fraud"
+  year: 2023
+  description: "In 2023, an investigation by the New York Attorney General concluded that the Trump Organization fraudulently inflated the value of its assets to secure loans and tax advantages. Trump and his children were sued, and the case is ongoing."
+  source: "https://apnews.com/article/trump-indictment-past-presidential-scandals-6fe9d423c42ea7fd945befcb4dd83704"
+  change_personal_context: True
+  game_context: "Financial misconduct investigation affecting a family business."
+  information_quality: 4

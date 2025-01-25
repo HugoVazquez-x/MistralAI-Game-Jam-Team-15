@@ -40,29 +40,23 @@ When it’s your turn, use the `Right Arrow` to navigate through the cards and p
 
 ## Features
 
-We extensively use MistralAI's LLM's 
-
-
-des llm permettent de donner vie à nos personnages - les candidats et le présentateur en général les questions et 
-nous utilisons également les llm de mistral pour évaluer l'état des candidats et savoir à quel point l'échange les énerve
-
-* we also use the text-to-speech models to generate dialogues from the text. 
-
+* LLM-based characters
+  * Dynamic mood
+  * Dynamic updating of the short term memory of the character as the Debate goes on
+* Synthetic voices to make them more lovely for the candidates using Speech-to-Voice models
+* The playable cards can be more or less targeted toward one of the opponents
 
 ## Tech Stack
 
 ### Project architecture
 
-The server project is hosted on a Scaleway server. This server communicates with a Unity client that controls the visual aspects of the Game 
+The server project is hosted on a Scaleway server. This server communicates with a Unity client that controls the visual aspects of the Game and the interactions with the player. 
 
 ### LLM backbones
 
+Our Opponents are embodied by Mistral AI LLM models. We prompt those models with a context, the personality and the mood of the opponents. 
 
-
-
-we use Mistral AI LLMs 
-
-. mention ici qu'on a prompté les LLM pour les empe^cher de générer du hatefulspeech
+In each prompt, we hard-coded a constraint aiming to prevent the generation of hateful speech.
 
 
 ## Contributors
@@ -76,3 +70,4 @@ we use Mistral AI LLMs
 
 
 ## License
+

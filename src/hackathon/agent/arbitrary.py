@@ -2,7 +2,91 @@ import json
 import re
 from mistralai import Mistral
 import time
+import hackathon.game_mechanics.entities as entities
+from typing import Tuple, List
+import hackathon.agent.character as ch
 
+
+class Agent:
+    def __init__(self, client: Mistral, model: str):
+        self.client = client
+        self.model = model
+
+
+class CardAgent(Agent):
+    def add_cards_to_personal_context(self, character:ch.AIAgent, cards:List[entities.Card]):
+        system_prompt = (
+                    "You are a conversationnal game update engine "
+                    "Given the two AI characters traits, and his current personnal context, "
+                    "you will propose a new personnal personal context"
+                )
+        user_prompt = ""
+        for card in cards:
+            if card.change_personal_context:
+                user_prompt += f"""
+                Character: {character}
+                Current personal context: {character.personal_context}
+                The context to be added to the personnal context : 
+                    Fact description : {card.description}
+                    Description of the effect on the player : {card.game_context}
+                """
+        user_prompt += f"""
+            Instructions:
+                Gives a new synthetic personal context to take into account this new description in less then 150 words, should return only the text format as string variable.
+            """
+        
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+
+        #print(f"{messages=}")
+
+        response = self.client.chat.complete(
+            model=self.model,
+            messages=messages
+        )
+
+        time.sleep(1)
+
+        raw_text = response.choices[0].message.content.strip()
+        character.personal_context = raw_text
+    
+    def add_card_to_personal_context(self, character:ch.AIAgent, card:entities.Card):
+        if card.change_personal_context:
+            system_prompt = (
+                "You are a conversationnal game update engine "
+                "Given the two AI characters traits, and his current personnal context, "
+                "you will propose a new personnal personal context"
+            )
+            user_prompt = f"""
+            Character: {character}
+            Current personal context: {character.personal_context}
+            The context to be added to the personnal context : 
+                Fact description : {card.description}
+                Description of the effect on the player : {card.game_context}
+            """
+            user_prompt += f"""
+                Instructions:
+                    Gives a new synthetic personal context to take into account this new description in less then 150 words, should return only the text format as string variable.
+                """
+            
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ]
+
+            #print(f"{messages=}")
+
+            response = self.client.chat.complete(
+                model=self.model,
+                messages=messages
+            )
+
+            time.sleep(1)
+
+            raw_text = response.choices[0].message.content.strip()
+            character.personal_context = raw_text
 
 class EmotionAgent:
     """
@@ -32,6 +116,7 @@ class EmotionAgent:
 
         user_prompt = f"""
         Character: {character}
+        Personal context: {character.personal_context}
         Current Emotions: {character.emotions}
         Current Attitudes: {character.attitudes}
         Conversation History: {character.context_memory}

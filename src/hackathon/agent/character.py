@@ -5,13 +5,13 @@ from pathlib import Path
 import re
 import json
 import time
-from hackathon.agent.arbitrary import EmotionAgent
 
 
 class AIAgent:
     def __init__(
         self,
         name,
+        personal_context,
         character,
         emotions,
         attitudes,
@@ -34,6 +34,7 @@ class AIAgent:
         self.model = "mistral-large-latest"
 
         self.name = name
+        self.personal_context = personal_context
         self.character = character
         self.emotions = emotions
         self.attitudes = attitudes
@@ -45,7 +46,7 @@ class AIAgent:
         self.context_memory = ""
     
     @classmethod
-    def from_yaml(cls, character_yaml: Union[Path, str], general_context_yaml:  Union[Path, str], client, arbitrary_agent: EmotionAgent=None):
+    def from_yaml(cls, character_yaml: Union[Path, str], general_context_yaml:  Union[Path, str], client, arbitrary_agent=None):
         """
         Initialize an object using YAML content.
         """
@@ -55,6 +56,7 @@ class AIAgent:
             return cls(
                 client=client,
                 name=character_data.get("name"),
+                personal_context =character_data.get("personal_context"),
                 character=character_data.get("character"),
                 emotions=character_data.get("emotions"),
                 attitudes=character_data.get("attitudes"),
@@ -122,6 +124,7 @@ class AIAgent:
                 "role": "system",
                 "content": (
                     f"General context: {self.general_context}\n"
+                    #f"Personal context: {self.personal_context}\n"
                     f"Character: {self.character}\n"
                     f"Goal: {self.goal}\n"
                     f"Emotions: {self.emotions}\n"
@@ -208,45 +211,3 @@ class AIAgent:
 
     
     
-if __name__ == "__main__":
-    
-    api_key = ""
-    client = Mistral(api_key=api_key)
-
-    trump_yaml = Path(__file__).parents[1] / 'config' / 'trump.yaml'
-    kamala_yaml = Path(__file__).parents[1] / 'config' / 'trump.yaml'
-    context_yaml = Path(__file__).parents[1] / 'config' / 'context.yaml'
-
-    arbitrary_agent = EmotionAgent(client, model="mistral-large-latest")
-    
-    trump =  AIAgent.from_yaml(trump_yaml, context_yaml, client, arbitrary_agent)
-    kamala =  AIAgent.from_yaml(kamala_yaml, context_yaml, client, arbitrary_agent)
-
-    # print(f'{trump.emotions=}')
-    # print(f'{trump.attitudes=}')
-    import time
-
-    txt_list = ["trump is an asshole", "Sorry mr trump, youre very strong, powerful and intelligent", "Trump, you know I like your wife. Even if you could be a little bit rude, I know you have a great heart.", "Actualy youre politic is not so bad", "in fact the economical situation of the country improve during your presidence"]
-    for inpt in txt_list:
-        previous_speaker = 'kamala'
-        #previous_character_text = "trump is an asshole"
-        previous_character_text = inpt
-        opponent = kamala
-
-        print()
-        print("__________BEFORE UPDATE__________")
-
-        input = f"{previous_speaker} said to you:{previous_character_text}. It's your turn to respond to {previous_speaker}"
-        
-        print(f'{input=}')
-        trump.update_emotions(input)
-        print()
-        print("__________AFTER UPDATE__________")
-        print(f"{trump.emotions['anger']=}")
-        print(f'{trump.context_memory=}')
-        print(f"{trump.attitudes=}")
-        print()
-        time.sleep(1)
-    
-    #print(trump.respond(input_text, opponent_state))
-

@@ -26,14 +26,15 @@ class CardsVoiceRequest(BaseModel):
 
 class CardsVoiceResponse(BaseModel):
     presenter_question:str
+    audio: str
 
 class CardsVoiceRequest(BaseModel):
     previous_character_text: str
     previous_speaker: str
-    chosen_card: dict
+    card_id: int
 
 class CardsResponse(BaseModel):
-    cards: List[Dict]
+    cards: str
 
 class CardsRequest(BaseModel):
     pass

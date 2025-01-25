@@ -31,8 +31,8 @@ class Presenter():
 
         input_instruction = f"""You are the moderator
         of the TV debate. You have to ask a question to the candidates
-        {next_speaker.name}. Note that the candidate is in the following attitude : {next_speaker.attitude}.
-        Here is thesubject of the question you have to ask: {card.title}.
+        {next_speaker.name}. Note that the candidate is in the following attitude : {next_speaker.attitudes}.
+        Here is thesubject of the question you have to ask: {card.description}.
         To give a bit of context, here is the last answer of the candidate {previous_speaker.name}: {last_sentence_said}.
         Keep it brief.
         """

@@ -1,16 +1,19 @@
 from http.client import HTTPException
 from fastapi import FastAPI, Request
+from hackathon.game_mechanics.pre_game_mechanics import generate_background_personality
 from hackathon.server.schemas import CardsRequest, CardsResponse, CardsVoiceRequest, CardsVoiceResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
 from hackathon.speech.speech import text_to_speech_file,read_audio_config, read_audio_file
 from mistralai import Mistral
 from pathlib import Path
 from hackathon.agent.character import AIAgent
-from hackathon.agent.character import EmotionAgent
+from hackathon.agent.arbitrary import EmotionAgent
 from hackathon.agent.engagement import Engagement
 from hackathon.agent.presenter import Presenter
+import hackathon.game_mechanics.entities as ent
+import hackathon.game_mechanics.pre_game_mechanics as pre
+import hackathon.agent.arbitrary as ar
+
 import os
-
-
 # Initialize FastAPI app
 app = FastAPI()
 
@@ -31,16 +34,28 @@ class GameEngine:
         self.data_folder = Path(__file__).parents[3] / 'src' / 'data' 
         context_yaml = Path(__file__).parents[3] / 'src' / 'config' / 'context.yaml'
         
+        cards_trump_yaml = Path(__file__).parents[3] /'src' / 'config' / 'cards_trump.yaml'
+        cards_kamela_yaml = Path(__file__).parents[3] /'src' / 'config' / 'cards_kamela.yaml'
+        cards_neutral_yaml = Path(__file__).parents[3] /'src'/ 'config' / 'cards_neutral.yaml' 
+        
         self.client = Mistral(api_key=api_key)
 
-        arbitrary_agent = EmotionAgent(self.client, model=self.model_name)
-        self.candidate_1 =  AIAgent.from_yaml(candidate_1_yaml, context_yaml, self.client, arbitrary_agent)
-        self.candidate_2 =  AIAgent.from_yaml(candidate_2_yaml, context_yaml, self.client, arbitrary_agent)
+        emotion_agent = EmotionAgent(self.client, model=self.model_name)
+        self.candidate_1 =  AIAgent.from_yaml(candidate_1_yaml, context_yaml, self.client, emotion_agent)
+        #generate_background_personality(self.candidate_1, self.client)
+        self.candidate_2 =  AIAgent.from_yaml(candidate_2_yaml, context_yaml, self.client, emotion_agent)
+        #generate_background_personality(self.candidate_2, self.client)
 
         self.engagement = Engagement()
 
         self.presenter = Presenter(self.candidate_1.general_context, self.client, model_name)
 
+        card_agent = ar.CardAgent(self.client, model="mistral-large-latest")
+        
+        self.deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
+        self.deck.sample()
+        pre.add_cards_to_personal_context_full_prompt(card_agent, [self.candidate_1, self.candidate_2], self.deck)
+       
         self.audio_config = read_audio_config(self.audio_yaml)
         self.timestamp = 0
         
@@ -74,7 +89,7 @@ async def infer(request: InferenceRequest):
         raise ValueError("Candidate name requested do not exist.")
     
     current_audio_config = game_engine.audio_config[current_speaker.name]
-    input_text = f"{request.previous_speaker} said :{request.previous_character_text}. You respond to {request.previous_speaker}"
+    input_text = f"{request.previous_speaker} said :{request.previous_character_text}. You have to respond to {request.previous_speaker}. Limit to less than 50 words."
     
     current_speaker.update_emotions(input_text)
     msg = current_speaker.respond(input_text)
@@ -138,7 +153,8 @@ async def cards(request: CardsVoiceRequest):
         next_speaker = game_engine.candidate_2
         last_speaker = game_engine.candidate_1
     
-    card = request.chosen_card #WARNING!!!! CHECK THE FORMAT
+    card_id = request.card_id #WARNING!!!! CHECK THE FORMAT
+    card = game_engine.deck.all_cards[card_id]
 
     current_audio_config = game_engine.audio_config['chairman']
 
@@ -158,17 +174,17 @@ async def cards(request: CardsVoiceRequest):
     
     os.remove(audio_file_path)
 
-    return {'presenter_question' : msg, "audio": audio_signal}
+    return {'presenter_question': msg, "audio": audio_signal}
 
 
-@app.post("/cards-request", response_model=CardsResponse)   
-async def cards(request: CardsRequest):
+@app.get("/cards_request", response_model=str)   
+async def cards():
 
     if not hasattr(app.state, "game_engine"):
         raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")
      
     game_engine = app.state.game_engine
 
-    cards = game_engine.deck.get_deck()
+    cards = game_engine.deck.to_json_all()
 
-    return cards   
+    return cards

@@ -9,6 +9,8 @@ from io import BytesIO
 import yaml
 import base64
 
+
+
 client = ElevenLabs(
     api_key='', # bad practice but whatever
 )
@@ -17,6 +19,7 @@ voices = {
     'politician1': 'ohZqJahxofk8dkPKmd9F',
     'politician2': 'v7sy7EHXxN3ToffFQfvr'
 }
+# voice_id: "ohZqJahxofk8dkPKmd9F" # Another voice just in case
 
 
 

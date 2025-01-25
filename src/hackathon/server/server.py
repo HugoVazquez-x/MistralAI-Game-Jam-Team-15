@@ -6,6 +6,7 @@ from mistralai import Mistral
 from pathlib import Path
 from hackathon.agent.character import AIAgent
 from hackathon.agent.character import EmotionAgent
+from hackathon.agent.engagement import Engagement
 
 
 # Initialize FastAPI app
@@ -33,6 +34,8 @@ class GameEngine:
         arbitrary_agent = EmotionAgent(self.client, model=self.model_name)
         self.candidate_1 =  AIAgent.from_yaml(candidate_1_yaml, context_yaml, self.client, arbitrary_agent)
         self.candidate_2 =  AIAgent.from_yaml(candidate_2_yaml, context_yaml, self.client, arbitrary_agent)
+
+        self.engagement=Engagement(engagement_0=0)
         
         # Audio config
         self.audio_config = read_audio_config(self.audio_yaml)
@@ -81,9 +84,17 @@ async def infer(request: InferenceRequest):
 
     return {"generated_text": msg, "anger": current_speaker.emotions['anger'], "audio": audio_signal}
 
+@app.post("/engagement", response_model=AudienceRequest)   
+async def engagement(self, request: AudienceRequest):
 
-async def audience(self, request: AudienceRequest):
-    pass
+    trump_anger=self.trump.character['angry']
+    kamala_anger=self.kamala.character['angry']
+
+    self.engagement.steer_engagement(trump_anger,kamala_anger)
+    value=self.engagement.engagement
+
+    
+    return {"current_audience_count":value}
 
 
 async def cards(self, request: CardsRequest):

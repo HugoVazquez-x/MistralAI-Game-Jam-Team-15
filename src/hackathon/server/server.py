@@ -45,9 +45,11 @@ class Server:
         if request.current_speaker == "trump":
             current_speaker = self.trump
             opponent = self.kamala
+            current_audio_config = self.audio_config['trump']
         elif request.current_speaker == "kamala":
             current_speaker = self.kamala
             opponent = self.trump
+            current_audio_config = self.audio_config['kamala']
         else:
             raise HTTPException(status_code=400, detail="Invalid current speaker.")
 
@@ -59,10 +61,10 @@ class Server:
         current_speaker.update_emotions(input_text)
         msg = current_speaker.respond(input_text)
         audio_file_path = text_to_speech_file(text=msg, 
-                                              voice=self.audio_config['voice_id'], 
-                                              stability=self.audio_config['stability'], 
-                                              similarity=self.audio_config['similarity'], 
-                                              style=self.audio_config['style'],
+                                              voice=current_audio_config['voice_id'], 
+                                              stability=current_audio_config['stability'], 
+                                              similarity=current_audio_config['similarity'], 
+                                              style=current_audio_config['style'],
                                               base_path='../../audio_store'
                                              )
         audio_signal = read_audio_file(audio_file_path) # base64

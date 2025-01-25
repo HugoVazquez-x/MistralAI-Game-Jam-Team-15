@@ -69,9 +69,6 @@ public class CustomClient
         {
             www.SetRequestHeader("game-id", GameManager.singleton.gameId);
             yield return www.SendWebRequest();
-
-            Debug.Log("GET RESPONSE: " + www.downloadHandler.text);
-
             if (www.result != UnityWebRequest.Result.Success)
             {
                 GameManager.singleton.HandleError(www.error + "\n(GET " + endpoint + ")");
@@ -121,9 +118,14 @@ public class CustomClient
             }
         );
 
-        Debug.Log("CustomClient body: " + body);
-
-        yield return PostApiCall("/start", body, (string res) => { });
+        yield return PostApiCall(
+            "/start",
+            body,
+            (string res) =>
+            {
+                Debug.Log("Started game succesfully!");
+            }
+        );
     }
 
     public IEnumerator Chat(
@@ -142,8 +144,6 @@ public class CustomClient
             }
         );
 
-        Debug.Log("CustomClient body: " + body);
-
         CustomClientChatRawResponse response = null;
 
         yield return PostApiCall(
@@ -154,8 +154,6 @@ public class CustomClient
                 response = JsonSerializer.Deserialize<CustomClientChatRawResponse>(res);
             }
         );
-
-        Debug.Log("CustomClient response: " + response.generated_text + " " + response.audio);
 
         yield return PostProcessAudio(
             response.audio,

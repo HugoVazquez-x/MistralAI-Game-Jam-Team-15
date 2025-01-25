@@ -7,6 +7,7 @@ from pathlib import Path
 from hackathon.agent.character import AIAgent
 from hackathon.agent.character import EmotionAgent
 from hackathon.agent.engagement import Engagement
+import os
 
 
 # Initialize FastAPI app
@@ -81,6 +82,7 @@ async def infer(request: InferenceRequest):
                                         )
     
     audio_signal = read_audio_file(audio_file_path) # base64 
+    os.remove(audio_file_path)
 
     return {"generated_text": msg, "anger": current_speaker.emotions['anger'], "audio": audio_signal}
 

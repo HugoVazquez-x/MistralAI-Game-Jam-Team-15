@@ -140,6 +140,7 @@ class AIAgent:
         # ------------------------------
         # Hypothetical call to LLM API
         # ------------------------------
+        time.sleep(1)
         chat_response = self.client.chat.complete(
             model=self.model,
             messages=messages,
@@ -183,13 +184,13 @@ class AIAgent:
             {"role": "user", "content": user_prompt},
         ]
 
+        time.sleep(1)
         response = self.client.chat.complete(
             model=self.model,
             messages=messages,
             response_format={"type": "json_object"},
             max_tokens=300
         )
-        time.sleep(1)
 
         raw_text = response.choices[0].message.content.strip()
         cleaned_response = re.sub(r"```(json)?", "", raw_text).strip()

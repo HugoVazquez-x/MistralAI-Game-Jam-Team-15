@@ -56,15 +56,13 @@ class EmotionAgent:
         ]
 
         #print(f"{messages=}")
-
+        time.sleep(1)
         response = self.client.chat.complete(
             model=self.model,
             messages=messages,
             response_format={"type": "json_object"},
             max_tokens=200
         )
-
-        time.sleep(1)
 
         raw_text = response.choices[0].message.content.strip()
         #print(f'{raw_text=}')

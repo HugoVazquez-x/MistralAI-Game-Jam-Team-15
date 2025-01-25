@@ -9,3 +9,9 @@ kamala:
   stability: 0.5
   similarity: 1.0
   style: 0.3
+
+chairman:
+  voice_id: "dJe6zN5mX9Dc4R9fVRuU"
+  stability: 0.5
+  similarity: 0.75
+  style: 0.0

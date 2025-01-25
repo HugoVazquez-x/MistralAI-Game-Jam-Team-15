@@ -1,3 +1,5 @@
 mistralai
 PyYaml
 elevenlabs
+uvicorn
+fastapi

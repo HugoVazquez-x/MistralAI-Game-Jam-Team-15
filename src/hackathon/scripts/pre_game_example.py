@@ -40,10 +40,10 @@ def card_enrichment():
     kamala_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
     context_yaml = Path(__file__).parents[2] / 'config' / 'context.yaml'
     cards_trump_yaml = Path(__file__).parents[2] / 'config' / 'cards_trump_english.yaml'
-    cards_kamela_yaml = Path(__file__).parents[2] / 'config' / 'cards_kamela.yaml'
+    cards_kamala_yaml = Path(__file__).parents[2] / 'config' / 'cards_kamala.yaml'
     cards_neutral_yaml = Path(__file__).parents[2] / 'config' / 'cards_neutrals.yaml'
 
-    deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
+    deck = ent.Deck(cards_trump_yaml, cards_kamala_yaml, cards_neutral_yaml)
 
 
     emotional_agent = ar.EmotionAgent(client, model="mistral-large-latest")
@@ -70,10 +70,10 @@ def deck_test():
     kamala_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
     context_yaml = Path(__file__).parents[2] / 'config' / 'context.yaml'
     cards_trump_yaml = Path(__file__).parents[2] / 'config' / 'cards_trump.yaml'
-    cards_kamela_yaml = Path(__file__).parents[2] / 'config' / 'cards_kamela.yaml'
+    cards_kamala_yaml = Path(__file__).parents[2] / 'config' / 'cards_kamala.yaml'
     cards_neutral_yaml = Path(__file__).parents[2] / 'config' / 'cards_neutral.yaml'
 
-    deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
+    deck = ent.Deck(cards_trump_yaml, cards_kamala_yaml, cards_neutral_yaml)
     deck.sample()
     print(f'{deck.to_json_all()=}')
 

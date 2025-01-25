@@ -2,7 +2,7 @@ from http.client import HTTPException
 from typing import Dict, List
 from fastapi import FastAPI, Request
 from hackathon.game_mechanics.pre_game_mechanics import generate_background_personality
-from hackathon.server.schemas import CardsRequest, CardsResponse, CardsVoiceRequest, CardsVoiceResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
+from hackathon.server.schemas import CardsRequest, CardsResponse, CardsVoiceRequest, CardsVoiceResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartMultipleRequest, StartMultipleResponse, StartRequest, StartResponse
 from hackathon.speech.speech import text_to_speech_file,read_audio_config, read_audio_file
 from mistralai import Mistral
 from pathlib import Path
@@ -18,6 +18,18 @@ import os
 # Initialize FastAPI app
 app = FastAPI()
 
+
+class GameInstances:
+    def __init__(self):
+        self.all_game = {}
+
+    def create_game(self, game_id: str, candidate_1_name: str, candidate_2_name: str):
+        self.all_game[game_id] = GameEngine(candidate_1_name, candidate_2_name)
+    
+    def remove_game(self, game_id: str):
+        del self.all_game[game_id]
+
+app.state.game_instances = GameInstances()
 
 class GameEngine:
     def __init__(self,
@@ -36,7 +48,7 @@ class GameEngine:
         context_yaml = Path(__file__).parents[3] / 'src' / 'config' / 'context.yaml'
         
         cards_trump_yaml = Path(__file__).parents[3] /'src' / 'config' / 'cards_trump.yaml'
-        cards_kamela_yaml = Path(__file__).parents[3] /'src' / 'config' / 'cards_kamela.yaml'
+        cards_kamala_yaml = Path(__file__).parents[3] /'src' / 'config' / 'cards_kamala.yaml'
         cards_neutral_yaml = Path(__file__).parents[3] /'src'/ 'config' / 'cards_neutral.yaml' 
         
         self.client = Mistral(api_key=api_key)
@@ -53,7 +65,7 @@ class GameEngine:
 
         card_agent = ar.CardAgent(self.client, model="mistral-large-latest")
         
-        self.deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
+        self.deck = ent.Deck(cards_trump_yaml, cards_kamala_yaml, cards_neutral_yaml)
         self.deck.sample()
         pre.add_cards_to_personal_context_full_prompt(card_agent, [self.candidate_1, self.candidate_2], self.deck)
        
@@ -63,7 +75,6 @@ class GameEngine:
 
 @app.post("/start", response_model=StartResponse)
 async def start(request: StartRequest):
-
     app.state.game_engine = GameEngine(candidate_1_name=request.candidate_1_name,
                                        candidate_2_name=request.candidate_2_name)
 
@@ -154,6 +165,13 @@ async def cards(request: CardsVoiceRequest):
         next_speaker = game_engine.candidate_2
         last_speaker = game_engine.candidate_1
     
+    elif previous_speaker_name == 'player':
+        next_speaker = game_engine.candidate_2
+        last_speaker = game_engine.candidate_1
+    
+    else:
+        raise ValueError(f"{previous_speaker_name} is not known!!")
+    
     card_id = request.card_id #WARNING!!!! CHECK THE FORMAT
     card = game_engine.deck.all_cards[card_id]
 
@@ -188,3 +206,13 @@ async def cards():
 
     cards_list = game_engine.deck.to_list()
     return cards_list
+
+
+@app.post("/start_multiples", response_model=StartMultipleResponse)
+async def start_multiples(request: StartMultipleRequest):
+    game_id = request.game_id
+    candidate_1_name = request.candidate_1_name
+    candidate_2_name = request.candidate_2_name
+    app.state.game_instances.create_game(game_id, candidate_1_name, candidate_2_name)
+
+    return {"status": "New game engine initialized successfully"}

@@ -48,3 +48,15 @@ class StartRequest(BaseModel):
 
 class StartResponse(BaseModel):
     status: str
+
+
+class StartMultipleRequest(BaseModel):
+    """
+    Available name for now: ['trump', 'kamala']
+    """
+    game_id: str
+    candidate_1_name: str 
+    candidate_2_name: str   
+
+class StartMultipleResponse(BaseModel):
+    status: str

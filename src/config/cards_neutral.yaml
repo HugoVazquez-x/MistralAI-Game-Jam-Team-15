@@ -1,7 +1,29 @@
-- title: "Neutral"
-  year: 2024
-  description: "Neutral."
-  source: "Neutral"
-  change_personal_context: false
-  game_context: "Neutral"
-  information_intensity: 5
+- title: "Global Trade Policies"
+  description: "What are key issues in global trade?"
+  year: 2023
+  source: "https://www.wto.org"
+
+- title: "Energy Independence"
+  description: "How can we achieve energy independence?"
+  year: 2023
+  source: "https://www.energy.gov"
+
+- title: "Mental Health Crisis"
+  description: "What can be done to improve mental health care?"
+  year: 2023
+  source: "https://www.nimh.nih.gov"
+
+- title: "Mistral"
+  description: "Do you see MistralAI as a significant threat to OpenAI, given public opinion that it could lead to bankruptcy?"
+  year: 2025
+  source: "https://www.nimh.nih.gov"
+
+- title: "Hugging Face"
+  description: "Is the AI company Hugging Face American or French?"
+  year: 2025
+  source: "https://www.nimh.nih.gov"
+
+- title: "Hackathon"
+  description: "What is your opinion on the MistralAI hackathon?"
+  year: 2023
+  source: "https://www.nimh.nih.gov"

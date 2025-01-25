@@ -1,3 +1,4 @@
+from typing import Dict, List
 from pydantic import BaseModel
 
 # Define the request and response schema
@@ -11,20 +12,30 @@ class InferenceResponse(BaseModel):
     anger: float
     audio: str
 
-class AudienceRequest(BaseModel): 
+class EngagementRequest(BaseModel): 
     pass
 
-class AudienceResponse(BaseModel): 
-    current_audience_count: int
+class EngagementResponse(BaseModel): 
+    engagement: int
     
 
-class CardsRequest(BaseModel):
+class CardsVoiceRequest(BaseModel):
+    previous_character_text:str
+    previous_speaker:str
+    chosen_card:dict
+
+class CardsVoiceResponse(BaseModel):
+    presenter_question:str
+
+class CardsVoiceRequest(BaseModel):
     previous_character_text:str
     previous_speaker:str
     chosen_card:dict
 
 class CardsResponse(BaseModel):
-    presenter_question:str
+    cards: List[Dict]
+
+class CardsRequest(BaseModel):
     pass
 
 class StartRequest(BaseModel):

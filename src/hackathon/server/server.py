@@ -1,6 +1,6 @@
 from http.client import HTTPException
 from fastapi import FastAPI, Request
-from hackathon.server.schemas import AudienceRequest, CardsRequest, CardsResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
+from hackathon.server.schemas import CardsRequest, CardsResponse, EngagementRequest, EngagementResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
 from hackathon.speech.speech import text_to_speech_file,read_audio_config, read_audio_file
 from mistralai import Mistral
 from pathlib import Path
@@ -25,11 +25,11 @@ class GameEngine:
         self.model_name = model_name
         self.api_key = api_key
 
-        context_yaml = Path(__file__).parents[3] / 'src' / 'config' / 'context.yaml'
         candidate_1_yaml = Path(__file__).parents[3] / 'src' / 'config' / f'{candidate_1_name}.yaml'
         candidate_2_yaml = Path(__file__).parents[3] / 'src' / 'config' / f'{candidate_2_name}.yaml'
         self.audio_yaml = Path(__file__).parents[3] / 'src' / 'config' / 'audio.yaml'
         self.data_folder = Path(__file__).parents[3] / 'src' / 'data' 
+        context_yaml = Path(__file__).parents[3] / 'src' / 'config' / 'context.yaml'
         
         self.client = Mistral(api_key=api_key)
 
@@ -37,21 +37,12 @@ class GameEngine:
         self.candidate_1 =  AIAgent.from_yaml(candidate_1_yaml, context_yaml, self.client, arbitrary_agent)
         self.candidate_2 =  AIAgent.from_yaml(candidate_2_yaml, context_yaml, self.client, arbitrary_agent)
 
-        self.engagement=Engagement(engagement_0=0)
+        self.engagement = Engagement()
 
-        self.presenter=Presenter(self.context_yaml.general_context,
-            self.client, model_name)
+        self.presenter = Presenter(self.candidate_1.general_context, self.client, model_name)
 
-        # FastAPI application instance
-        self.app = FastAPI()
-
-        # Define routes
-        self.app.post("/infer", response_model=InferenceResponse)(self.infer)
-        self.app.post("/audience", response_model=InferenceResponse)(self.audience)
-        self.app.post("/debate-cards", response_model=InferenceResponse)(self.cards)
-
-        # Audio config
         self.audio_config = read_audio_config(self.audio_yaml)
+        self.timestamp = 0
         
 
 @app.post("/start", response_model=StartResponse)
@@ -67,8 +58,11 @@ async def start(request: StartRequest):
 async def infer(request: InferenceRequest):
     if not hasattr(app.state, "game_engine"):
         raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")
-     
+    
+
     game_engine = app.state.game_engine
+    game_engine.timestamp += 1
+
     data_folder = game_engine.data_folder
 
     if request.current_speaker == game_engine.candidate_1.name:
@@ -98,26 +92,35 @@ async def infer(request: InferenceRequest):
 
     return {"generated_text": msg, "anger": current_speaker.emotions['anger'], "audio": audio_signal}
 
-@app.post("/engagement", response_model=AudienceRequest)   
-async def engagement(self, request: AudienceRequest):
 
-    trump_anger=self.trump.character['angry']
-    kamala_anger=self.kamala.character['angry']
-
-    self.engagement.steer_engagement(trump_anger,kamala_anger)
-    value=self.engagement.engagement
-
+@app.get("/engagement")
+async def engagement():
     
-    return {"current_audience_count":value}
+    if not hasattr(app.state, "game_engine"):
+        raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")    
+    
+    game_engine = app.state.game_engine
 
-@app.post("/debate-cards", response_model=CardsResponse)   
-async def cards(self, request: CardsRequest):
+    if game_engine.timestamp > game_engine.engagement.timestamp:
+        candidate_1_anger = game_engine.candidate_1.emotions['anger']
+        candidate_2_anger = game_engine.candidate_2.emotions['anger']
+
+        game_engine.engagement.update(candidate_1_anger, candidate_2_anger)
+        value = game_engine.engagement.current_value
+    else:
+        value = game_engine.engagement.current_value
+
+    return {'engagement': value}
+
+
+@app.post("/card-voice", response_model=CardsResponse)   
+async def cards(request: CardsRequest):
 
     if not hasattr(app.state, "game_engine"):
         raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")
      
     game_engine = app.state.game_engine
-
+    game_engine.timestamp += 1
     presenter=game_engine.presenter
 
     last_text=request.previous_character_text
@@ -125,14 +128,19 @@ async def cards(self, request: CardsRequest):
     card=request.chosen_card
 
 
-    prompt=presenter.play_card(card,last_text,previous_speaker)
+    prompt=presenter.play_card(card, last_text, previous_speaker)
 
     return {'presenter_question' : prompt}
 
 
-async def start(self,):
-    pass
+@app.post("/cards-request", response_model=CardsResponse)   
+async def cards(request: CardsRequest):
 
-async def end(self,):
-    pass
-    
+    if not hasattr(app.state, "game_engine"):
+        raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")
+     
+    game_engine = app.state.game_engine
+
+    cards = game_engine.deck.get_deck()
+
+    return cards   

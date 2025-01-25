@@ -1,3 +1,4 @@
+import time
 
 
 class Presenter():
@@ -56,6 +57,7 @@ class Presenter():
             },
         ]
         # Call the chat completion API
+        time.sleep(1)
         chat_response = self.client.chat.complete(
             model=self.model,
             messages=messages,
@@ -66,46 +68,3 @@ class Presenter():
         out=chat_response.choices[0].message.content
         self.own_history.append({'user' : out})
         return out
-        
-#    def exit(self, audimat, candidates_input, max_tokens=500):
-#        """
-#        generate the exit prompt when the debates ends
-#        """
-#
-#        winner='Trump' if audimat > 0 else "Harris"
-#
-#        input_instructions="""
-#        You are the presenter of a TV show and you want to close a debate between
-#        two contenters. The debate ended as the time arrived to its end. You declare based 
-#        on the engagement of the audience that the winner of the debate is {}. 
-#        Keep it brief, and fun, it is for a video game
-#        """.format(winner)
-#
-#        messages = [
-#            {
-#                "role": "system",
-#                "content": (
-#                    f"General context: {self.general_context}\n"
-#                ),
-#            },
-#            {
-#                "role": "user",
-#                "content": (
-#                    f"Instructions: {input_instructions}\n"
-#                    f"Opponent's last sentences: {candidates_input}\n"
-#                    f"Conversation history: {self.own_history}"
-#                ),
-#            },
-#        ]
-#
-#                # Call the chat completion API
-#        chat_response = self.client.chat.complete(
-#            model=self.model,
-#            messages=messages,
-#            max_tokens=max_tokens,  # Adjust this value as needed
-#            )
-#
-#        # Extract and return the assistant's response
-#        out=chat_response.choices[0].message.content
-#        self.own_history.append({'user' : out})
-#        return out

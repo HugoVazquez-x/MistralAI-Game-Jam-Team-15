@@ -74,6 +74,7 @@ def deck_test():
     cards_neutral_yaml = Path(__file__).parents[2] / 'config' / 'cards_neutral.yaml'
 
     deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
+    deck.sample()
     print(f'{deck.to_json_all()=}')
 
 

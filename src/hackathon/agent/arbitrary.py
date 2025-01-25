@@ -94,5 +94,3 @@ class EmotionAgent:
                 final_attitudes[attitude] = val
         
         return final_emotions, final_attitudes
-
-    

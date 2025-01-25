@@ -61,5 +61,22 @@ def card_enrichment():
     print(trump.personal_context)
 
 
+def deck_test():
+    api_key = ""
+    client = Mistral(api_key=api_key)
+    print(Path(__file__))
+
+    trump_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
+    kamala_yaml = Path(__file__).parents[2] / 'config' / 'trump.yaml'
+    context_yaml = Path(__file__).parents[2] / 'config' / 'context.yaml'
+    cards_trump_yaml = Path(__file__).parents[2] / 'config' / 'cards_trump.yaml'
+    cards_kamela_yaml = Path(__file__).parents[2] / 'config' / 'cards_kamela.yaml'
+    cards_neutral_yaml = Path(__file__).parents[2] / 'config' / 'cards_neutral.yaml'
+
+    deck = ent.Deck(cards_trump_yaml, cards_kamela_yaml, cards_neutral_yaml)
+    print(f'{deck.to_json_all()=}')
+
+
 if __name__ == "__main__":
-    card_enrichment()
+    deck_test()
+    #card_enrichment()

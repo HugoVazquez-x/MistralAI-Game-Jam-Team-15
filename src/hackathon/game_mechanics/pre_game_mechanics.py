@@ -42,13 +42,13 @@ def generate_background_personality(character: ch.AIAgent, client):
                 ),
             },
         ]
+    time.sleep(1)
     chat_response = client.chat.complete(
         model=character.model,
         messages=messages
     )
     # ------------------------------------------------
     character.personal_context = chat_response.choices[0].message.content
-    time.sleep(1)
     
 
 def add_cards_to_personal_context_full_prompt(card_agent:ar.CardAgent, characters: Tuple[ch.AIAgent, ch.AIAgent], deck:entities.Deck):

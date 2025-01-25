@@ -12,9 +12,10 @@ class Deck:
     def __init__(self, data_path_char_1:Path, data_path_char_2:Path, 
                  data_path_neutral:Path):
         self.cards_1 = self.add_cards_from_path(data_path_char_1, -1)
-        self.cards_2 = self.add_cards_from_path(data_path_char_1, 1)
-        self.cards_neutral = self.add_cards_from_path(data_path_char_1, 1)
-        
+        self.cards_2 = self.add_cards_from_path(data_path_char_2, 1)
+        self.cards_neutral = self.add_cards_from_path(data_path_neutral, 0)
+        self.cards_samples = None
+
     def add_cards_from_path(self, data_path_char:Path, side:int):
         cards = util.read_yaml(data_path_char)
         cards_ = []
@@ -23,25 +24,25 @@ class Deck:
             cards_.append(Card.from_dict(card_dict))
         return cards_
 
+    def shuffle_all(self):
+        random.shuffle(self.all_cards)
+
     def sample(self):
-        n_1 = random.randint(5, 10)
+        n_1 = min(len(self.cards_1), random.randint(5, 10))
         self.cards_1 = random.sample(self.cards_1, n_1)
 
-        n_2 = random.randint(5, 10)
+        n_2 = min(len(self.cards_2), random.randint(5, 10))
         self.cards_2 = random.sample(self.cards_2, n_2)
 
-        n_neutral = random.randint(5, 10)
+        n_neutral = min(len(self.cards_neutral), random.randint(5, 10))
         self.cards_neutral = random.sample(self.cards_neutral, n_neutral)
-    
-    def all_cards(self):
-        return self.cards_1 + self.cards_2 + self.cards_neutral
+
+        self.all_cards = self.cards_1 + self.cards_2 + self.cards_neutral
+        self.shuffle_all()
 
     def to_json_all(self): 
         all_cards = self.cards_1 + self.cards_2 + self.cards_neutral
-        return json.dumps([asdict(card) for card in all_cards], indent=2)
-
-
-
+        return json.dumps([asdict(card) for card in all_cards])
 
 
 @dataclass

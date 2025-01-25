@@ -124,6 +124,7 @@ class AIAgent:
                 "role": "system",
                 "content": (
                     f"General context: {self.general_context}\n"
+                    #f"Personal context: {self.personal_context}\n"
                     f"Character: {self.character}\n"
                     f"Goal: {self.goal}\n"
                     f"Emotions: {self.emotions}\n"

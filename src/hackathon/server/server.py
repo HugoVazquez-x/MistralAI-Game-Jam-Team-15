@@ -1,6 +1,6 @@
 from http.client import HTTPException
 from fastapi import FastAPI, Request
-from hackathon.server.schemas import AudienceRequest, CardsRequest, InferenceRequest, InferenceResponse, StartRequest, StartResponse
+from hackathon.server.schemas import AudienceRequest, CardsRequest, CardsResponse, InferenceRequest, InferenceResponse, StartRequest, StartResponse
 from hackathon.speech.speech import text_to_speech_file,read_audio_config, read_audio_file
 from mistralai import Mistral
 from pathlib import Path
@@ -105,24 +105,22 @@ async def engagement(self, request: AudienceRequest):
     
     return {"current_audience_count":value}
 
+@app.post("/debate-cards", response_model=CardsResponse)   
+async def cards(self, request: CardsRequest):
 
-    async def cards(self, request: CardsRequest):
+    last_text=request.previous_character_text
+    previous_speaker=request.previous_speaker
+    card=request.chosen_card
 
-        trump_last_said=self.trump....
-        trump_last_said=self.trump....
 
-        candidates_input= {
-            'trump':trump_last_said,
-            "kamala":kamala_last_said
-        }
-        prompt=self.presenter.play_card(request,candidates_input)
+    prompt=self.presenter.play_card(card,last_text,previous_speaker)
 
-        return {'presenter_question' : prompt}
+    return {'presenter_question' : prompt}
+
+
+async def start(self,):
+    pass
+
+async def end(self,):
+    pass
     
-
-    async def start(self,):
-        pass
-
-    async def end(self,):
-        pass
-        

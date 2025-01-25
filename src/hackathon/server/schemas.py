@@ -19,10 +19,12 @@ class AudienceResponse(BaseModel):
     
 
 class CardsRequest(BaseModel):
-    chosed_card:dict
-
+    previous_character_text:str
+    previous_speaker:str
+    chosen_card:dict
 
 class CardsResponse(BaseModel):
+    presenter_question:str
     pass
 
 class StartRequest(BaseModel):

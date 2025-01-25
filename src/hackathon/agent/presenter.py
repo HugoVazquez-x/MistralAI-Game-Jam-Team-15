@@ -58,13 +58,14 @@ class Presenter():
         return chat_response.choices[0].message.content
     
 
-    def play_card(self, card , candidates_input, max_tokens=500):
+    def play_card(self, card, last_sentence_said, 
+                  previous_speaker, max_tokens=500):
         """
         card is a dictionnary
         candidates input: contains the last sentences said by
         the candidates
 
-        instruction:{card_type : sentiment} and comes from
+        card:{card_type : sentiment} and comes from
         the player if the latter decided to play a card. 
         """
 
@@ -72,10 +73,10 @@ class Presenter():
 
         input_instruction = """You are the moderator
         of the TV debate. You ask a question to the candidates
-        about {} with a tone that is {}. You have the previous answers 
-        of the candidates to smooth the question and the transition. Keep
-        it brief, and fun, it is for a video game.      
-        """.format(topic, mood)
+        about {} with a tone that is {}. You have the last answer from {} 
+        to smooth the question and the transition. Keep
+        it brief, and fun, it is for a video game. .      
+        """.format(topic, mood, previous_speaker)
 
 
         messages = [
@@ -89,7 +90,7 @@ class Presenter():
                 "role": "user",
                 "content": (
                     f"Instructions: {input_instruction}\n"
-                    f"Opponent's last sentences: {candidates_input}\n"
+                    f"Opponent's last sentences: {last_sentence_said}\n"
                     f"Conversation history: {self.own_history}"
                 ),
             },
@@ -105,6 +106,8 @@ class Presenter():
         out=chat_response.choices[0].message.content
         self.own_history.append({'user' : out})
         return out
+        
+
     
 
     def exit(self, audimat, candidates_input, max_tokens=500):

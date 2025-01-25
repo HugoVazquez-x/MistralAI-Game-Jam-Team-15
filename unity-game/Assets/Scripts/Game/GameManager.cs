@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,15 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
+    void InitGameId()
+    {
+        Guid myuuid = Guid.NewGuid();
+        string myuuidAsString = myuuid.ToString();
+        gameId = myuuidAsString;
+    }
+
+    public string gameId;
 
     public string customApiUrl = "http://192.168.80.144:8000";
 
@@ -78,8 +88,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        currentCharacter = leftCharacter;
+        InitGameId();
+        currentCharacter = leftCharacter; // start with trump speaking
+
         StartCoroutine(StartGame());
+
         timer = GetComponent<MainTimer>();
         scoreManager = GetComponent<ScoreManager>();
     }

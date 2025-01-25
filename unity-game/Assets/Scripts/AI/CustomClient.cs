@@ -67,6 +67,7 @@ public class CustomClient
             UnityWebRequest www = UnityWebRequest.Get(GameManager.singleton.customApiUrl + endpoint)
         )
         {
+            www.SetRequestHeader("game-id", GameManager.singleton.gameId);
             yield return www.SendWebRequest();
 
             Debug.Log("GET RESPONSE: " + www.downloadHandler.text);
@@ -94,6 +95,8 @@ public class CustomClient
         )
         {
             yield return www.SendWebRequest();
+            www.SetRequestHeader("game-id", GameManager.singleton.gameId);
+
             requestCount++;
 
             if (www.result != UnityWebRequest.Result.Success)

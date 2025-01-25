@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4843842207291698335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4631091016568875096}
+  - component: {fileID: 3489173090616759414}
+  - component: {fileID: 7293163478249845916}
+  - component: {fileID: 4147971772817592057}
+  - component: {fileID: 7559316726307062999}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4631091016568875096
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843842207291698335}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.21156691, y: -0.3400149, z: -0.0074935523}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3489173090616759414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843842207291698335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9def5c327fdfd42ccba0f12c63288290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customApiUrl: http://192.168.80.22:8000
+  useCustomApi: 1
+  leftCharacter: {fileID: 0}
+  rightCharacter: {fileID: 0}
+  firstPrompt: Welcome to this debate night
+  bossCallUIPrefab: {fileID: 2527275160268220112, guid: 72300633ee78047e3a110d744a12fa21, type: 3}
+  debateCardPrefab: {fileID: 7399956716987095883, guid: 4aee977e36d8142f1b17e63496ad5da6, type: 3}
+  score: 0
+  timer: {fileID: 0}
+--- !u!114 &7293163478249845916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843842207291698335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37fe4a78604af4a7391d40e9217ae5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeRemaining: 10
+--- !u!114 &4147971772817592057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843842207291698335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e4fdd6a34edb46588969c72bfa4fe96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  engagement: 0
+--- !u!114 &7559316726307062999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843842207291698335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a67bd7ce893b84103bc29b558ff79fee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,29 +1,47 @@
 - title: "Global Trade Policies"
-  description: "What are key issues in global trade?"
   year: 2023
+  description: "What are key issues in global trade?"
   source: "https://www.wto.org"
+  change_personal_context: true
+  game_context: "Ongoing challenges in global trade negotiations."
+  information_intensity: 3
 
 - title: "Energy Independence"
-  description: "How can we achieve energy independence?"
   year: 2023
+  description: "How can we achieve energy independence?"
   source: "https://www.energy.gov"
+  change_personal_context: true
+  game_context: "Debates on renewable energy versus fossil fuels."
+  information_intensity: 4
 
 - title: "Mental Health Crisis"
-  description: "What can be done to improve mental health care?"
   year: 2023
+  description: "What can be done to improve mental health care?"
   source: "https://www.nimh.nih.gov"
+  change_personal_context: true
+  game_context: "Healthcare reform focusing on mental health resources."
+  information_intensity: 5
 
 - title: "Mistral"
-  description: "Do you see MistralAI as a significant threat to OpenAI, given public opinion that it could lead to bankruptcy?"
   year: 2025
+  description: "Do you see MistralAI as a significant threat to OpenAI, given public opinion that it could lead to bankruptcy?"
   source: "https://www.nimh.nih.gov"
+  change_personal_context: false
+  game_context: "Competitive dynamics in the AI industry."
+  information_intensity: 4
 
 - title: "Hugging Face"
-  description: "Is the AI company Hugging Face American or French?"
   year: 2025
+  description: "Is the AI company Hugging Face American or French?"
   source: "https://www.nimh.nih.gov"
+  change_personal_context: false
+  game_context: "Origins and influence of tech companies in the AI sector."
+  information_intensity: 2
 
 - title: "Hackathon"
-  description: "What is your opinion on the MistralAI hackathon?"
   year: 2023
+  description: "What is your opinion on the MistralAI hackathon?"
   source: "https://www.nimh.nih.gov"
+  change_personal_context: false
+  game_context: "Community-driven innovation in AI through hackathons."
+  information_intensity: 3

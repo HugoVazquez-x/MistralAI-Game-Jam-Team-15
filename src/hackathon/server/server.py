@@ -5,6 +5,7 @@ from mistralai import Mistral
 from pathlib import Path
 from hackathon.agent.character import AIAgent
 from hackathon.agent.character import EmotionAgent
+from hackathon.game_mechanics.pre_game_mechanics import generate_background_personality 
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -25,6 +26,9 @@ class Server:
         self.trump = AIAgent.from_yaml(self.trump_yaml, self.context_yaml, self.client, self.arbitrary_agent)
         self.kamala = AIAgent.from_yaml(self.kamala_yaml, self.context_yaml, self.client, self.arbitrary_agent)
 
+        generate_background_personality(self.trump, self.client)
+        generate_background_personality(self.kamala, self.client)
+
         # FastAPI application instance
         self.app = FastAPI()
 
@@ -32,6 +36,8 @@ class Server:
         self.app.post("/infer", response_model=InferenceResponse)(self.infer)
         self.app.post("/audience", response_model=InferenceResponse)(self.audience)
         self.app.post("/debate-cards", response_model=InferenceResponse)(self.cards)
+
+        
 
     
     async def infer(self, request: InferenceRequest):

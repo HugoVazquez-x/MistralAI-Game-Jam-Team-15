@@ -39,6 +39,9 @@ class GameEngine:
 
         self.engagement=Engagement(engagement_0=0)
 
+        self.presenter=Presenter(self.context_yaml.general_context,
+            self.client, model_name)
+
         # FastAPI application instance
         self.app = FastAPI()
 
@@ -110,12 +113,19 @@ async def engagement(self, request: AudienceRequest):
 @app.post("/debate-cards", response_model=CardsResponse)   
 async def cards(self, request: CardsRequest):
 
+    if not hasattr(app.state, "game_engine"):
+        raise HTTPException(status_code=400, detail="Game engine not initialized. Call /start first.")
+     
+    game_engine = app.state.game_engine
+
+    presenter=game_engine.presenter
+
     last_text=request.previous_character_text
     previous_speaker=request.previous_speaker
     card=request.chosen_card
 
 
-    prompt=self.presenter.play_card(card,last_text,previous_speaker)
+    prompt=presenter.play_card(card,last_text,previous_speaker)
 
     return {'presenter_question' : prompt}
 

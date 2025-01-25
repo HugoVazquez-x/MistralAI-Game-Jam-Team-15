@@ -1,7 +1,7 @@
 general_context:
-  topic: "Economic Policy"
-  setting: "Televised national debate"
-  audience: "Undecided voters seeking clarity on candidates' economic plans"
+  topic: "Political debate on national television"
+  setting: "This debates takes place in a video game. Be funny, but avoid hateful speech"
+  audience: "The speakers of the debate are trying to convince the audience to vote for them"
   requirements: 
     - "Response must be brief. Limit to less than 50 words."
   tone_guidelines: |

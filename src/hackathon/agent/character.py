@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 import json
 import time
-from arbitrary_agent import EmotionAgent
+from hackathon.server.agent.arbitrary import EmotionAgent
 
 
 class AIAgent:

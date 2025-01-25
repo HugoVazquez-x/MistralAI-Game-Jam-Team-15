@@ -30,6 +30,9 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.singleton.isGameOver)
+            return;
+
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 

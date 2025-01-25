@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Mistral.SDK</id>
+    <version>2.0.1</version>
+    <title>Mistral API</title>
+    <authors>Grant Hamm</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/tghamm/Mistral.SDK</projectUrl>
+    <description>A C# / .NET library to use with Mistral's API.  Supports Streaming, Embedding, Semantic Kernel Integration.</description>
+    <releaseNotes>Updates Microsoft.Extensions.AI.Abstractions</releaseNotes>
+    <copyright>This library is licensed MIT, in the public domain</copyright>
+    <tags>Mistral, AI, ML, API, C#, .NET, Mixtral</tags>
+    <repository type="git" url="https://github.com/tghamm/Mistral.SDK" branch="refs/heads/main" commit="9df137b7133ae581ed4f940833ecf70855dcc407" />
+    <dependencies>
+      <group targetFramework="net6.0">
+        <dependency id="Microsoft.Bcl.AsyncInterfaces" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.AI.Abstractions" version="9.1.0-preview.1.25064.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0">
+        <dependency id="Microsoft.Bcl.AsyncInterfaces" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.AI.Abstractions" version="9.1.0-preview.1.25064.3" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Microsoft.Bcl.AsyncInterfaces" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.AI.Abstractions" version="9.1.0-preview.1.25064.3" exclude="Build,Analyzers" />
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="8.0.5" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

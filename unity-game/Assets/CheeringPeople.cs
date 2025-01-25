@@ -22,7 +22,7 @@ public class CheeringPeople : MonoBehaviour
     {
         timeBetweenSprites = Random.Range(0.1f, 0.5f);
         spriteRenderer = GetComponent<SpriteRenderer>();
-        StartCoroutine(ChangeSprite());
+        spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
         initialPosition = transform.position;
     }
 
@@ -38,11 +38,5 @@ public class CheeringPeople : MonoBehaviour
                 ) * 0.1f,
             initialPosition.z
         );
-    }
-
-    IEnumerator ChangeSprite()
-    {
-        yield return new WaitForSeconds(timeBetweenSprites * timeBetweenSpritesMultiplier);
-        spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
     }
 }

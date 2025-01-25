@@ -23,18 +23,36 @@ public class AICharacter : MonoBehaviour
 
     public string Context => context;
 
-    public float anger = 0; // from 0 to 10
+    [SerializeField]
+    private float anger = 0; // from 0 to 10
+
+    public float Anger // from 0 to 10
+    {
+        get => anger;
+        set => SetAnger(value);
+    }
 
     [SerializeField]
     private AnimationCurve rednessByAnger;
 
+    [SerializeField]
+    private AnimationCurve jitterByAnger;
+
+    [SerializeField]
+    private Thermometer angerMeter;
+
     private Animator animator;
 
+    [SerializeField]
     private SpriteRenderer headRenderer;
+
+    [SerializeField]
+    private Jitter jitter;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        SetAnger(anger);
     }
 
     public void StartTalking()
@@ -47,7 +65,7 @@ public class AICharacter : MonoBehaviour
         animator.SetBool("isTalking", false);
     }
 
-    public void SetAnger(float newAnger)
+    private void SetAnger(float newAnger)
     {
         anger = newAnger;
         foreach (var head in heads)
@@ -62,5 +80,14 @@ public class AICharacter : MonoBehaviour
             Color.red,
             rednessByAnger.Evaluate(anger / 10)
         );
+
+        angerMeter.Value = anger / 10;
+
+        jitter.Amplitude = jitterByAnger.Evaluate(anger / 10);
+
+        if (anger >= 10)
+        {
+            GameManager.singleton.OnCharacterLeft(this);
+        }
     }
 }

@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class DialogManager : MonoBehaviour
 {
@@ -15,19 +16,20 @@ public class DialogManager : MonoBehaviour
 
     private AICharacter? currentTalkingCharacter;
 
-    [SerializeField]
-    public GameObject clickForNextHint;
+    private AudioSource audioSource;
 
     [SerializeField]
-    private GameObject playerQuestionPanel;
+    private float textSpeed = 0.05f;
 
     void Start()
     {
         dialogPanel.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
     }
 
-    public void CharacterSay(AICharacter? c, string dialog)
+    public IEnumerator CharacterSay(AICharacter? c, string dialog, AudioClip audioClip)
     {
+        currentTalkingCharacter?.StopTalking();
         if (c != null)
         {
             currentTalkingCharacter = c;
@@ -39,25 +41,19 @@ public class DialogManager : MonoBehaviour
             charNameText.text = "Debate Host";
         }
         dialogPanel.SetActive(true);
-        StartCoroutine(AnimateText(dialog));
-    }
-
-    IEnumerator AnimateText(string text)
-    {
-        dialogText.text = "";
-        foreach (char letter in text.ToCharArray())
-        {
-            dialogText.text += letter;
-            yield return new WaitForSeconds(0.02f);
-        }
-
-        dialogText.text = text;
+        yield return AnimateText(dialog, audioClip);
         currentTalkingCharacter?.StopTalking();
     }
 
-    public void OnPlayerSendQuestion(string question)
+    IEnumerator AnimateText(string text, AudioClip audioClip)
     {
-        dialogPanel.SetActive(false);
-        GameManager.singleton.OnPlayerSendQuestion(question);
+        audioSource.clip = audioClip;
+        audioSource.Play();
+        audioSource.pitch = GameManager.singleton.globalSpeedMultiplier;
+        yield return Helpers.AnimateText(
+            dialogText,
+            text,
+            textSpeed / GameManager.singleton.globalSpeedMultiplier
+        );
     }
 }

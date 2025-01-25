@@ -5,6 +5,7 @@ from mistralai import Mistral
 from pathlib import Path
 from hackathon.agent.character import AIAgent
 from hackathon.agent.character import EmotionAgent
+from hackathon.agent.engagement import Engagement
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -24,6 +25,8 @@ class Server:
         self.arbitrary_agent = EmotionAgent(self.client, model="mistral-large-latest")
         self.trump = AIAgent.from_yaml(self.trump_yaml, self.context_yaml, self.client, self.arbitrary_agent)
         self.kamala = AIAgent.from_yaml(self.kamala_yaml, self.context_yaml, self.client, self.arbitrary_agent)
+
+        self.engagement=Engagement(engagement_0=0)
 
         # FastAPI application instance
         self.app = FastAPI()
@@ -55,8 +58,16 @@ class Server:
 
         return {"generated_text": msg, "anger": current_speaker.emotions['anger']}
     
-    async def audience(self, request: AudienceRequest):
-        pass
+    async def engagement(self, request: AudienceRequest):
+
+        trump_anger=self.trump.character['angry']
+        kamala_anger=self.kamala.character['angry']
+
+        self.engagement.steer_engagement(trump_anger,kamala_anger)
+        value=self.engagement.engagement
+
+        
+        return {"current_audience_count":value}
 
 
     async def cards(self, request: CardsRequest):

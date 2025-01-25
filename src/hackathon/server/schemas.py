@@ -10,10 +10,11 @@ class InferenceResponse(BaseModel):
     generated_text: str
     anger: float
 
-class AudienceRequest(BaseModel):
+class AudienceRequest(BaseModel): # ce dont j'ai besoin comme info pour l'audience
     pass
 
-class AudienceResponse(BaseModel):
+class AudienceResponse(BaseModel): # envoie un float
+    current_audience_count: int
     pass
 
 class CardsRequest(BaseModel):

@@ -162,8 +162,8 @@ async def cards(request: CardsVoiceRequest):
         last_speaker = game_engine.candidate_1
 
     elif previous_speaker_name == game_engine.candidate_2.name:
-        next_speaker = game_engine.candidate_2
-        last_speaker = game_engine.candidate_1
+        next_speaker = game_engine.candidate_1
+        last_speaker = game_engine.candidate_2
     
     elif previous_speaker_name == 'player':
         next_speaker = game_engine.candidate_2

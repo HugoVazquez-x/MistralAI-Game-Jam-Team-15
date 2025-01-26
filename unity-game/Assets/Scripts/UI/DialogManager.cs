@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Networking;
 
 public class DialogManager : MonoBehaviour
@@ -17,6 +18,9 @@ public class DialogManager : MonoBehaviour
     private AICharacter? currentTalkingCharacter;
 
     private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioMixerGroup voiceMixerGroup;
 
     [SerializeField]
     private float textSpeed = 0.05f;
@@ -61,7 +65,10 @@ public class DialogManager : MonoBehaviour
     {
         audioSource.clip = audioClip;
         audioSource.Play();
+
         audioSource.pitch = GameManager.singleton.globalSpeedMultiplier;
+        voiceMixerGroup.audioMixer.SetFloat("pitch", 1f / audioSource.pitch);
+
         yield return Helpers.AnimateText(
             dialogText,
             text,

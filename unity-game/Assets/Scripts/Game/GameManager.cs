@@ -112,6 +112,8 @@ public class GameManager : MonoBehaviour
         if (isGameOver)
             yield break;
 
+        MainCanvas.singleton.loadingPanel.SetActive(false);
+
         yield return Fader.FadeIn();
         Debug.Log("Game started ! " + nextCard == null);
 

@@ -83,7 +83,7 @@ $$
 D_{n+1} = F(S, M_k, D_n)
 $$
 
-Where F is caracterized by the LLM model used and is modulated by the intention of the game. The intention should be to stabilized the debate to a calm behaviour are, at the contrary to make the debate go **out of control**.
+Where F is caracterized by the LLM model used and is modulated by the intention of the game. The intention should be keep the debate consistent, to keep a calm behaviour or increases candidates excitation to make the debate go **out of control**.
 
 ## Contributors
 

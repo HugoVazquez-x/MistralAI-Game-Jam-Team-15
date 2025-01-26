@@ -16,12 +16,18 @@ public class ScoreManager : MonoBehaviour
 
     public int callNumber = 4;
 
-    public string[] bigBossNames = new string[] { "Bolloré", "Drahi", "Niel", "Pigasse" };
+    public string[] bigBossNames = new string[]
+    {
+        "Bolloré",
+        "Drahi",
+        "Xavier Niel",
+        "Bernard Arnault",
+    };
 
     public string[] bigBossCalls = new string[]
     {
         "Just had a call! {TARGET} needs to win",
-        "My wife wants that {TARGET} wins, you better do it, or esle!...",
+        "My wife wants that {TARGET} wins, you better do it, or else!...",
         "I just got a call from {TARGET}, they want to win",
         "IF {TARGET} DOESN'T WIN, YOU'RE FIRED!",
     };

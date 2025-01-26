@@ -71,6 +71,7 @@ class Card:
     def from_dict(cls, data: Dict) -> "Card":
         return cls(**data)
 
+
 @dataclass
 class Environment:
     description:str

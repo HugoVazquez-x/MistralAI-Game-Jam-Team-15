@@ -13,7 +13,7 @@ class Presenter():
         un candidat a quitté le débat ou si 
         tout le public est parti
         """
-
+        self.name = "The presenter of the emission"
         self.client = client
         self.model = model
         self.general_context = general_context

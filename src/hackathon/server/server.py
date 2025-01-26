@@ -72,11 +72,10 @@ class GameEngine:
         self.audio_config = read_audio_config(self.audio_yaml)
         self.timestamp = 0
         
-
+        
 @app.post("/start", response_model=StartResponse)
 async def start(request: StartRequest):
-    app.state.game_engine = GameEngine(candidate_1_name=request.candidate_1_name,
-                                       candidate_2_name=request.candidate_2_name)
+    app.state.game_instances.create_game(request.game_idx, request.candidate_1_name, request.candidate_2_name)
 
     return {"status": "Game engine initialized successfully"}
 

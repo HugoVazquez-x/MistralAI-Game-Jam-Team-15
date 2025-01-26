@@ -13,6 +13,36 @@ class Agent:
         self.model = model
 
 
+class TurnAgent(Agent):
+    def find_next_candidate(self, previous_character, previous_msg, next_msg, character_1, character_2):
+        system_prompt = (
+                    "You are a conversationnal game update engine "
+                    "Given the two AI characters traits, and his current personnal context, "
+                    "you will propose a new personnal personal context"
+                )
+        user_prompt = ""
+        
+        user_prompt += f"""
+            Instructions:
+                Gives a new synthetic personal context to take into account this new description in less then 150 words, should return only the text format as string variable.
+            """
+        
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+
+        #print(f"{messages=}")
+
+        response = self.client.chat.complete(
+            model=self.model,
+            messages=messages
+        )
+
+        time.sleep(1)
+
+        raw_text = response.choices[0].message.content.strip()
+
 class CardAgent(Agent):
     def add_cards_to_personal_context(self, character:ch.AIAgent, cards:List[entities.Card]):
         system_prompt = (

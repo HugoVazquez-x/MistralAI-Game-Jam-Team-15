@@ -43,6 +43,7 @@ class StartRequest(BaseModel):
     """
     Available name for now: ['trump', 'kamala']
     """
+    game_idx: int
     candidate_1_name: str 
     candidate_2_name: str   
 

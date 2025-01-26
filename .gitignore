@@ -172,3 +172,4 @@ cython_debug/
 
 .DS_Store
 hf-repo
+hf-repo-docker

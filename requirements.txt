@@ -3,4 +3,5 @@ PyYaml
 elevenlabs
 uvicorn
 fastapi
+fastapi[standard]
 pydantic

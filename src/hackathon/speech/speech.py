@@ -44,8 +44,8 @@ def text_to_speech_file(text: str, voice_id: str, stability=0.5, similarity=1.0,
     """voice: politician1 or politician2"""
     # Calling the text_to_speech conversion API with detailed parameters
     response = client.text_to_speech.convert(
-        voice_id=voice_id, # Adam pre-made voice
-        output_format="mp3_22050_32",
+        voice_id=voice_id,  # Adam pre-made voice
+        output_format="mp3_44100_32",
         text=text,
         model_id="eleven_turbo_v2_5", # use the turbo model for low latency
         voice_settings=VoiceSettings(

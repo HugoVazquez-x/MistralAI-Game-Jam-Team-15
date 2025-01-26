@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public enum Turn
@@ -75,6 +76,8 @@ public class GameManager : MonoBehaviour
 
     public bool gameStarted = false;
 
+    public AudioClip sampleAudio;
+
     void Start()
     {
         StartGame();
@@ -84,7 +87,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameStarted)
             return;
-        
+
         gameStarted = true;
         player = FindObjectOfType<Player>();
 
@@ -96,6 +99,7 @@ public class GameManager : MonoBehaviour
         timer = GetComponent<MainTimer>();
         scoreManager = GetComponent<ScoreManager>();
         soundManager = GetComponent<SoundManager>();
+        TestAudio();
     }
 
     IEnumerator StartGameCoroutine()
@@ -318,4 +322,22 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+
+
+    public void TestAudio()
+    {
+        // read file
+
+        Debug.Log("Testing audio clip...");
+
+        //     StartCoroutine(Helpers.PostProcessAudio(base64mp3, (
+        //         AudioClip processedAudioClip) =>
+        //     {
+        //         Debug.Log("Audio clip processed, trying to play it...");
+        //         // Utilisez l'audio clip traité ici
+        //         MainCanvas.singleton.dialogManager.audioSource.clip = processedAudioClip;
+        //         MainCanvas.singleton.dialogManager.audioSource.Play();
+        // }));
+    }
 }

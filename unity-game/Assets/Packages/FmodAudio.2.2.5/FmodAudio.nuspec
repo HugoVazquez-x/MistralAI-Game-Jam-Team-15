@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>FmodAudio</id>
+    <version>2.2.5</version>
+    <authors>Joshua Newcomb</authors>
+    <license type="file">LICENSE.md</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <description>Wrapper Library for the Fmod Core API in C#. This version requires .NET 5.0+. Use requires that you download the Fmod native binaries from their website. https://www.fmod.com/download
+
+Library versions from 2.2.0 onward correspond to the version of Fmod that it's meant for.</description>
+    <releaseNotes>FmodAudio: Directly Support Android OS</releaseNotes>
+    <repository url="https://github.com/sunkin351/FmodAudio" />
+    <dependencies>
+      <group targetFramework="net5.0" />
+    </dependencies>
+  </metadata>
+</package>

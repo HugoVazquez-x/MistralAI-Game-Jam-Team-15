@@ -17,7 +17,7 @@ public class DialogManager : MonoBehaviour
 
     private AICharacter? currentTalkingCharacter;
 
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     [SerializeField]
     private AudioMixerGroup voiceMixerGroup;

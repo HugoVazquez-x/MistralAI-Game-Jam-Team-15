@@ -99,6 +99,7 @@ public class ScoreManager : MonoBehaviour
     void Update()
     {
         if (
+            GameManager.singleton.gameStarted &&
             Mathf.FloorToInt(Time.time) != Mathf.FloorToInt(Time.time + Time.deltaTime)
             && !GameManager.singleton.isGameOver
         )

@@ -73,21 +73,32 @@ public class GameManager : MonoBehaviour
 
     public Player player;
 
+    public bool gameStarted = false;
+
     void Start()
     {
+        StartGame();
+    }
+
+    public void StartGame()
+    {
+        if (gameStarted)
+            return;
+        
+        gameStarted = true;
         player = FindObjectOfType<Player>();
 
         InitGameId();
         currentCharacter = leftCharacter; // start with trump speaking
 
-        StartCoroutine(StartGame());
+        StartCoroutine(StartGameCoroutine());
 
         timer = GetComponent<MainTimer>();
         scoreManager = GetComponent<ScoreManager>();
         soundManager = GetComponent<SoundManager>();
     }
 
-    IEnumerator StartGame()
+    IEnumerator StartGameCoroutine()
     {
         Fader.instance.SetFullBlack();
 

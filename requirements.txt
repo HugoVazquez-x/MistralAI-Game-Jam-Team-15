@@ -3,3 +3,4 @@ PyYaml
 elevenlabs
 uvicorn
 fastapi
+pydantic

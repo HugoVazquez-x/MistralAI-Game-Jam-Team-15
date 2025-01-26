@@ -26,7 +26,7 @@ Our theme encouraged us to explore new ways of influencing characters and outcom
 
 Our game is playable on [HuggingFace 🤗](https://huggingface.co/spaces/Mistral-AI-Game-Jam/Team15). 
 
-The debate begins, and the candidates start speaking in turn. When it’s the presenter’s turn, the player can choose to play a card from their hand to ask a question or let the debate continue.
+The debate begins, and the candidates start speaking in turn. The player can choose to play a card from their hand to ask a question or let the debate continue.
 
 The exchanges between the candidates affect their state of mind, particularly their level of anger. The angrier a candidate becomes, the more they polarize the audience against them. If a candidate gets too angry, they may suddenly leave the debate.
 

@@ -69,7 +69,7 @@ The static context $S$ is composed by :
 - The personal context of the character : how he's feeling right now and how some specific subjects could impact himself (cases that could hurt him during the debate);
 - His goal during the debate;
 - His character : how he behave in life;
-- 
+
 The dynamic context $D$ is composed by :
 - His memory of what happen before during the debate;
 - His emotions, in particular his anger : which drives the dynamic of the game;

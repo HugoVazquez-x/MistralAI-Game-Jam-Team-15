@@ -10,9 +10,10 @@ import yaml
 import base64
 
 
+ELEVENLABS_API_KEY = os.environ['ELEVENLABS_API_KEY']
 
 client = ElevenLabs(
-    api_key='', # bad practice but whatever
+    api_key=ELEVENLABS_API_KEY, # bad practice but whatever
 )
 
 voices = {
@@ -56,7 +57,7 @@ def text_to_speech_file(text: str, voice_id: str, stability=0.5, similarity=1.0,
         ),
     )
 
-    
+
     save_file_path = os.path.join(base_path, f"{uuid.uuid4()}.mp3")
 
     with open(save_file_path, "wb") as f:

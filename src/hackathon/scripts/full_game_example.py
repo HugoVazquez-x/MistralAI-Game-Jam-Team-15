@@ -63,6 +63,7 @@ class GameEngine:
 
         self.speaker_turns = ["presenter"]
         self.texts = ["Welcome everyone into this presidential debate."]
+        for card in self.deck.all_cards: card.side = -1
 
     def agregate(self):
         pass
@@ -99,6 +100,13 @@ class GameEngine:
     
     def get_previous_text(self):
         return self.texts[-1]
+    
+    def set_next_candidate_to_speak(self, idx_candidate):
+        self.current_candidate_idx = idx_candidate
+        self.current_speaker_idx = idx_candidate
+
+    def set_speaker(self, idx_speaker):
+        self.current_speaker_idx = idx_speaker
 
     def candidate_speaks(self, verbose = True):
         if self.current_speaker_idx == 2:
@@ -125,20 +133,28 @@ class GameEngine:
         if self.current_card_idx < len(self.deck.all_cards):
             card: ent.Card = self.deck.all_cards[self.current_card_idx]
             previous_speaker = self.get_previous_speaker()
-            next_speaker = self.get_next_speaker()
+            card_side = card.side
+            if card_side == 0:
+                self.set_next_candidate_to_speak(random.randint(0, 1))
+            if card_side == -1:
+                self.set_next_candidate_to_speak(0)
+            if card_side == 1:
+                self.set_next_candidate_to_speak(1)
+            next_speaker = self.get_previous_speaker()
             msg = self.presenter.play_card(card, self.get_previous_text(), previous_speaker, next_speaker)
             self.current_card_idx += 1
             self.change_speaker()
             if verbose:
                 print("------------------------")
                 print(f"{self.presenter.name} : {msg}")
+            
             self.texts.append(msg)
             self.speaker_turns.append(self.presenter.name)
             return msg
         else:
             print("You don't have any card to play")
         
-    def play(self, verbose):
+    def play(self, verbose, presenter_turn = True):
         if self.current_speaker_idx == 2:
             return self.play_card(verbose)
         else:
@@ -148,5 +164,6 @@ class GameEngine:
 if __name__ == "__main__":
     game = GameEngine("trump", "kamala")
     nb_turns = 10
+    presenter_turns = [True, False, False, False, True]
     for i in range(nb_turns):
         game.play(verbose=True)

@@ -195,6 +195,7 @@ async def cards(request: CardsVoiceRequest):
     return {'presenter_question': msg, "audio": audio_signal}
 
 
+
 @app.get("/cards_request", response_model=List[Dict])   
 async def cards():
 
